@@ -1,25 +1,21 @@
-package net.targul.adservice.model;
-
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
+package net.targul.adservice.kafka.event;
 
 import java.util.List;
 
-@Document(collection = "ads")
-public class Ad {
-    @Id
+public class AdCreatedEvent {
     private String id;
     private String title;
     private String description;
     private double price;
-    private List<Category> categories;
+    private List<String> categories;
 
-    // Getters and Setters
-    public List<Category> getCategories() {
-        return categories;
-    }
+    public AdCreatedEvent() {};
 
-    public void setCategories(List<Category> categories) {
+    public AdCreatedEvent(String id, String title, String description, double price, List<String> categories) {
+        this.id = id;
+        this.title = title;
+        this.description = description;
+        this.price = price;
         this.categories = categories;
     }
 
@@ -53,5 +49,13 @@ public class Ad {
 
     public void setPrice(double price) {
         this.price = price;
+    }
+
+    public List<String> getCategories() {
+        return categories;
+    }
+
+    public void setCategories(List<String> categories) {
+        this.categories = categories;
     }
 }

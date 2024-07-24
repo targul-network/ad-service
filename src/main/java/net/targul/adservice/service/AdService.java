@@ -1,11 +1,11 @@
 package net.targul.adservice.service;
 
-import net.targul.adservice.event.AdEvent;
-import net.targul.adservice.kafka.AdEventProducer;
+import net.targul.adservice.kafka.event.AdCreatedEvent;
+import net.targul.adservice.kafka.producer.AdEventProducer;
 import net.targul.adservice.model.Ad;
 import net.targul.adservice.repository.AdRepository;
 import org.springframework.stereotype.Service;
-
+import net.targul.adservice.model.Category;
 import java.util.List;
 
 @Service
@@ -20,7 +20,15 @@ public class AdService {
 
     public Ad createAd(Ad ad) {
         Ad savedAd = adRepository.save(ad);
-        adEventProducer.sendAdEvent(new AdEvent("AdCreated", savedAd));
+        AdCreatedEvent event = new AdCreatedEvent(
+                ad.getId(),
+                ad.getTitle(),
+                ad.getDescription(),
+                ad.getPrice(),
+                ad.getCategories().stream().map(Category::getName).toList()
+        );
+
+        adEventProducer.sendAdCreatedEvent(event);
         return savedAd;
     }
 
@@ -31,12 +39,12 @@ public class AdService {
     public Ad updateAd(String id, Ad ad) {
         ad.setId(id);
         Ad updatedAd = adRepository.save(ad);
-        adEventProducer.sendAdEvent(new AdEvent("AdUpdated", updatedAd));
+        // TODO Implement kafka event creation
         return updatedAd;
     }
 
     public void deleteAd(String id) {
         adRepository.deleteById(id);
-        adEventProducer.sendAdEvent(new AdEvent("AdDeleted", new Ad(id)));
+        // TODO Implement kafka event creation
     }
 }

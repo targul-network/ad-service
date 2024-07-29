@@ -2,7 +2,7 @@ package net.targul.adservice.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import net.targul.adservice.dto.ad.AdRequestDto;
+import net.targul.adservice.dto.ad.AdRequest;
 import net.targul.adservice.dto.ad.AdDto;
 import net.targul.adservice.entity.Ad;
 import net.targul.adservice.exception.ad.AdServiceBusinessException;
@@ -33,12 +33,12 @@ public class AdServiceImpl implements AdService {
 
     @Override
     @Transactional
-    public AdDto createAd(AdRequestDto adRequestDto) {
+    public AdDto createAd(AdRequest adRequest) {
         log.info("AdService::createAd execution has been started.");
-        log.debug("AdService::createAd request parameters {}", adRequestDto);
+        log.debug("AdService::createAd request parameters {}", adRequest);
 
         try {
-            Ad ad = adMapper.toEntity(adRequestDto);
+            Ad ad = adMapper.toEntity(adRequest);
             Ad savedAd = adRepository.save(ad);
             AdDto adDto = adMapper.toDto(savedAd);
             log.debug("AdService::createAd received response from Database {}", savedAd);

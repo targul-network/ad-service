@@ -10,7 +10,6 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Builder
 @Document(collection = "ads")
 public class Ad {
-
     @Id
     private String id;
     private String title;

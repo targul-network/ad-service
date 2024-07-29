@@ -1,8 +1,9 @@
 package net.targul.adservice.kafka.config;
 
-import net.targul.adservice.kafka.event.AdCreatedEvent;
+import net.targul.adservice.dto.ad.AdDto;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.StringSerializer;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.kafka.core.DefaultKafkaProducerFactory;
@@ -17,7 +18,7 @@ import java.util.Map;
 public class KafkaProducerConfig {
 
     @Bean
-    public ProducerFactory<String, AdCreatedEvent> producerFactory() {
+    public ProducerFactory<String, AdDto> producerFactory() {
         Map<String, Object> configProps = new HashMap<>();
         configProps.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
         configProps.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
@@ -26,7 +27,7 @@ public class KafkaProducerConfig {
     }
 
     @Bean
-    public KafkaTemplate<String, AdCreatedEvent> kafkaTemplate() {
+    public KafkaTemplate<String, AdDto> kafkaTemplate() {
         return new KafkaTemplate<>(producerFactory());
     }
 }

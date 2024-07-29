@@ -1,37 +1,32 @@
 package net.targul.adservice.controller;
 
-import net.targul.adservice.model.Ad;
-import net.targul.adservice.service.AdService;
-import org.springframework.web.bind.annotation.*;
+import jakarta.validation.Valid;
 
-import java.util.List;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+
+import net.targul.adservice.dto.ad.AdRequestDto;
+import net.targul.adservice.dto.ad.AdDto;
+import net.targul.adservice.service.AdService;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/ads")
+@Slf4j
+@RequiredArgsConstructor
 public class AdController {
+
     private final AdService adService;
 
-    public AdController(AdService adService) {
-        this.adService = adService;
-    }
-
     @PostMapping
-    public Ad createAd(@RequestBody Ad ad) {
-        return adService.createAd(ad);
-    }
+    public ResponseEntity<AdDto> createAd(@RequestBody @Valid AdRequestDto adRequestDto) {
+        log.info("AdController::createAd request body {}", adRequestDto);
+        AdDto adDto = adService.createAd(adRequestDto);
 
-    @GetMapping
-    public List<Ad> getAllAds() {
-        return adService.getAllAds();
-    }
-
-    @PutMapping("/{id}")
-    public Ad updateAd(@PathVariable String id, @RequestBody Ad ad) {
-        return adService.updateAd(id, ad);
-    }
-
-    @DeleteMapping("/{id}")
-    public void deleteAd(@PathVariable String id) {
-        adService.deleteAd(id);
+        log.info("ProductController::createNewProduct response {}", adDto);
+        return new ResponseEntity<>(adDto, HttpStatus.CREATED);
     }
 }

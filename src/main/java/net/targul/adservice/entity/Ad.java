@@ -1,20 +1,19 @@
-package net.targul.adservice.model;
+package net.targul.adservice.entity;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Builder;
+import lombok.Data;
+
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.util.List;
-
+@Data
+@Builder
 @Document(collection = "ads")
-@Getter
-@Setter
 public class Ad {
+
     @Id
     private String id;
     private String title;
     private String description;
-    private double price;
-    private List<Category> categories;
+    private Double price;
 }

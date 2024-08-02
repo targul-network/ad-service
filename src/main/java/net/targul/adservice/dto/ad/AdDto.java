@@ -14,4 +14,5 @@ public class AdDto {
     private String description;
     private Double price;
     private List<String> imageUrls;
+    private List<String> categoryIds;
 }

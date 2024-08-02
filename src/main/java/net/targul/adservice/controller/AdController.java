@@ -14,6 +14,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/ads")
 @Validated
@@ -25,6 +27,14 @@ public class AdController {
 
     public AdController(AdService adService) {
         this.adService = adService;
+    }
+
+    @GetMapping("/filters")
+    public ResponseEntity<List<AdDto>> getFilteredAds(
+            @RequestParam(required = false) String price) {
+        adService.getFilteredAds();
+        // todo
+        return null;
     }
 
     @PostMapping

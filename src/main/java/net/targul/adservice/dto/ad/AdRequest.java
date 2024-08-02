@@ -1,6 +1,7 @@
 package net.targul.adservice.dto.ad;
 
 import jakarta.validation.constraints.*;
+
 import lombok.Builder;
 import lombok.Data;
 
@@ -26,4 +27,8 @@ public class AdRequest {
     @NotEmpty(message = "Image URLs list cannot be blank")
     @Size(max = 10, message = "Image URLs list cannot contain more than 10 urls")
     private List<String> imageUrls;
+
+    @NotNull(message = "Image categoryIds list is mandatory")
+    @NotEmpty(message = "Image categoryIds list cannot be blank")
+    private List<String> categoryIds;
 }

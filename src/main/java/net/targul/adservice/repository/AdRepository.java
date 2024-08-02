@@ -1,6 +1,6 @@
 package net.targul.adservice.repository;
 
-import net.targul.adservice.entity.Ad;
+import net.targul.adservice.entity.ad.Ad;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
 

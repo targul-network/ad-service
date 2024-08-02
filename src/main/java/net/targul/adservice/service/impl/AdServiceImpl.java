@@ -2,8 +2,8 @@ package net.targul.adservice.service.impl;
 
 import net.targul.adservice.dto.ad.AdRequest;
 import net.targul.adservice.dto.ad.AdDto;
-import net.targul.adservice.entity.Ad;
-import net.targul.adservice.entity.AdStatus;
+import net.targul.adservice.entity.ad.Ad;
+import net.targul.adservice.entity.ad.AdStatus;
 import net.targul.adservice.exception.EntityNotFoundException;
 import net.targul.adservice.exception.ad.AdServiceBusinessException;
 import net.targul.adservice.exception.ad.AdServiceDataException;
@@ -15,8 +15,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -31,7 +31,12 @@ public class AdServiceImpl implements AdService {
     }
 
     @Override
-    @Transactional
+    public List<AdDto> getFilteredAds() {
+        // todo
+        return null;
+    }
+
+    @Override
     public AdDto createAd(AdRequest adRequest) {
         log.info("AdService::createAd execution has been started.");
         log.debug("AdService::createAd request parameters {}", adRequest);
@@ -56,7 +61,6 @@ public class AdServiceImpl implements AdService {
     }
 
     @Override
-    @Transactional
     public AdDto updateAd(String id, AdRequest adRequest) {
         log.info("AdService::updateAd execution has started.");
         log.debug("AdService::updateAd request parameters {}", adRequest);
@@ -80,7 +84,6 @@ public class AdServiceImpl implements AdService {
     }
 
     @Override
-    @Transactional
     public void activateAd(String id) {
         Optional<Ad> adOptional = adRepository.findById(id);
         if (adOptional.isEmpty()) {
@@ -96,7 +99,6 @@ public class AdServiceImpl implements AdService {
     }
 
     @Override
-    @Transactional
     public void deactivateAd(String id) {
         Optional<Ad> adOptional = adRepository.findById(id);
         if (adOptional.isEmpty()) {
@@ -112,7 +114,6 @@ public class AdServiceImpl implements AdService {
     }
 
     @Override
-    @Transactional
     public void archiveAd(String id) {
         log.info("AdService::archiveAd execution has started.");
         log.debug("AdService::archiveAd ad id {}", id);
@@ -133,7 +134,6 @@ public class AdServiceImpl implements AdService {
     }
 
     @Override
-    @Transactional
     public void banAd(String id) {
         Optional<Ad> adOptional = adRepository.findById(id);
         if (adOptional.isEmpty()) {

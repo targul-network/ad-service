@@ -2,7 +2,7 @@ package net.targul.adservice.mapper;
 
 import net.targul.adservice.dto.ad.AdRequest;
 import net.targul.adservice.dto.ad.AdDto;
-import net.targul.adservice.entity.Ad;
+import net.targul.adservice.entity.ad.Ad;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -17,6 +17,7 @@ public class AdMapper {
                 .description(adRequest.getDescription())
                 .price(adRequest.getPrice())
                 .imageUrls(adRequest.getImageUrls())
+                .categoryIds(adRequest.getCategoryIds())
                 .build();
     }
 
@@ -31,6 +32,7 @@ public class AdMapper {
                 .description(ad.getDescription())
                 .price(ad.getPrice())
                 .imageUrls(ad.getImageUrls())
+                .categoryIds(ad.getCategoryIds())
                 .build();
     }
 }

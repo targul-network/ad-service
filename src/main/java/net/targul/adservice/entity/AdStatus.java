@@ -4,5 +4,6 @@ public enum AdStatus {
     PENDING,
     ACTIVE,
     INACTIVE,
-    ARCHIVED
+    ARCHIVED,
+    BANNED
 }

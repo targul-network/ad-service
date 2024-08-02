@@ -47,10 +47,29 @@ public class AdController {
         return new ResponseEntity<>(updatedAdDto, HttpStatus.OK);
     }
 
+    @PutMapping("/{id}/activate")
+    public ResponseEntity<Void> activateAd(@PathVariable String id) {
+        adService.activateAd(id);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @PutMapping("/{id}/deactivate")
+    public ResponseEntity<Void> deactivateAd(@PathVariable String id) {
+        adService.deactivateAd(id);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
     @PutMapping("/{id}/archive")
     public ResponseEntity<Void> archiveAd(@PathVariable String id) {
-        log.info("AdController::archiveAd processing Ad with id: {}", id);
+        log.info("AdController::archiveAd is processing Ad with id: {}", id);
         adService.archiveAd(id);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @PutMapping("/{id}/ban")
+    public ResponseEntity<Void> banAd(@PathVariable String id) {
+        log.info("AdController::banAd is processing Ad with id: {}", id);
+        adService.banAd(id);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }

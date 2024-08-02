@@ -21,7 +21,6 @@ import java.util.Optional;
 
 @Service
 public class AdServiceImpl implements AdService {
-
     private static final Logger log = LoggerFactory.getLogger(AdServiceImpl.class);
     private final AdRepository adRepository;
     private final AdMapper adMapper;
@@ -39,6 +38,7 @@ public class AdServiceImpl implements AdService {
 
         try {
             Ad ad = adMapper.toEntity(adRequest);
+
             ad.setStatus(AdStatus.PENDING);
 
             Ad savedAd = adRepository.save(ad);
@@ -67,13 +67,48 @@ public class AdServiceImpl implements AdService {
         }
 
         Ad updatedAd = adMapper.toEntity(adRequest);
+
         updatedAd.setId(id);
+        updatedAd.setStatus(AdStatus.PENDING);
+
         Ad savedAd = adRepository.save(updatedAd);
         AdDto savedAdDto = adMapper.toDto(savedAd);
 
         log.info("AdService::updateAd: ad with id {} has been updated successfully: {}", id, savedAdDto);
         log.info("AdService::updateAd execution has ended.");
         return savedAdDto;
+    }
+
+    @Override
+    @Transactional
+    public void activateAd(String id) {
+        Optional<Ad> adOptional = adRepository.findById(id);
+        if (adOptional.isEmpty()) {
+            throw new EntityNotFoundException("Unable to activate nonexistent Ad entity with ID: " + id);
+        }
+
+        Ad adToArchive = adOptional.get();
+
+        if(!adToArchive.getStatus().equals(AdStatus.ACTIVE)) {
+            adToArchive.setStatus(AdStatus.ACTIVE);
+            adRepository.save(adToArchive);
+        }
+    }
+
+    @Override
+    @Transactional
+    public void deactivateAd(String id) {
+        Optional<Ad> adOptional = adRepository.findById(id);
+        if (adOptional.isEmpty()) {
+            throw new EntityNotFoundException("Unable to deactivate nonexistent Ad entity with ID: " + id);
+        }
+
+        Ad adToArchive = adOptional.get();
+
+        if(!adToArchive.getStatus().equals(AdStatus.INACTIVE)) {
+            adToArchive.setStatus(AdStatus.INACTIVE);
+            adRepository.save(adToArchive);
+        }
     }
 
     @Override
@@ -95,5 +130,21 @@ public class AdServiceImpl implements AdService {
 
         log.info("AdService::archiveAd: ad with id {} has been archived successfully", id);
         log.info("AdService::archiveAd execution has ended.");
+    }
+
+    @Override
+    @Transactional
+    public void banAd(String id) {
+        Optional<Ad> adOptional = adRepository.findById(id);
+        if (adOptional.isEmpty()) {
+            throw new EntityNotFoundException("Unable to ban nonexistent Ad entity with ID: " + id);
+        }
+
+        Ad adToBan = adOptional.get();
+
+        if(!adToBan.getStatus().equals(AdStatus.BANNED)) {
+            adToBan.setStatus(AdStatus.BANNED);
+            adRepository.save(adToBan);
+        }
     }
 }

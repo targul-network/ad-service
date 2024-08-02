@@ -3,6 +3,8 @@ package net.targul.adservice.dto.ad;
 import lombok.Builder;
 import lombok.Data;
 
+import java.util.List;
+
 @Data
 @Builder
 public class AdDto {
@@ -11,4 +13,5 @@ public class AdDto {
     private String title;
     private String description;
     private Double price;
+    private List<String> imageUrls;
 }

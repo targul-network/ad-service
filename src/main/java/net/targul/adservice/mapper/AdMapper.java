@@ -16,6 +16,7 @@ public class AdMapper {
                 .title(adRequest.getTitle())
                 .description(adRequest.getDescription())
                 .price(adRequest.getPrice())
+                .imageUrls(adRequest.getImageUrls())
                 .build();
     }
 
@@ -29,6 +30,7 @@ public class AdMapper {
                 .title(ad.getTitle())
                 .description(ad.getDescription())
                 .price(ad.getPrice())
+                .imageUrls(ad.getImageUrls())
                 .build();
     }
 }

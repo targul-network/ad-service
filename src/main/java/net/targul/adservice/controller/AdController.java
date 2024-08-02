@@ -72,4 +72,11 @@ public class AdController {
         adService.banAd(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteAd(@PathVariable String id) {
+        log.info("AdController::banAd is processing Ad with id: {}", id);
+        adService.deleteAd(id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
 }

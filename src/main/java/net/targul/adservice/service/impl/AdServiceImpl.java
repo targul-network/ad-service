@@ -147,4 +147,14 @@ public class AdServiceImpl implements AdService {
             adRepository.save(adToBan);
         }
     }
+
+    @Override
+    public void deleteAd(String id) {
+
+        if (adRepository.existsById(id)) {
+            adRepository.deleteById(id);
+        } else {
+            throw new EntityNotFoundException("Unable to delete nonexistent Ad entity with ID: " + id);
+        }
+    }
 }

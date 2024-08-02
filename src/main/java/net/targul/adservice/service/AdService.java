@@ -10,4 +10,5 @@ public interface AdService {
     void deactivateAd(String id);
     void archiveAd(String id);
     void banAd(String id);
+    void deleteAd(String id);
 }

@@ -1,11 +1,9 @@
 package net.targul.adservice.service.impl;
 
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-
 import net.targul.adservice.dto.ad.AdRequest;
 import net.targul.adservice.dto.ad.AdDto;
 import net.targul.adservice.entity.Ad;
+import net.targul.adservice.entity.AdStatus;
 import net.targul.adservice.exception.EntityNotFoundException;
 import net.targul.adservice.exception.ad.AdServiceBusinessException;
 import net.targul.adservice.exception.ad.AdServiceDataException;
@@ -13,17 +11,25 @@ import net.targul.adservice.mapper.AdMapper;
 import net.targul.adservice.repository.AdRepository;
 import net.targul.adservice.service.AdService;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
+
 @Service
-@Slf4j
-@RequiredArgsConstructor
 public class AdServiceImpl implements AdService {
 
+    private static final Logger log = LoggerFactory.getLogger(AdServiceImpl.class);
     private final AdRepository adRepository;
     private final AdMapper adMapper;
+
+    public AdServiceImpl(AdRepository adRepository, AdMapper adMapper) {
+        this.adRepository = adRepository;
+        this.adMapper = adMapper;
+    }
 
     @Override
     @Transactional
@@ -33,6 +39,8 @@ public class AdServiceImpl implements AdService {
 
         try {
             Ad ad = adMapper.toEntity(adRequest);
+            ad.setStatus(AdStatus.PENDING);
+
             Ad savedAd = adRepository.save(ad);
             AdDto adDto = adMapper.toDto(savedAd);
             log.debug("AdService::createAd received response from Database {}", savedAd);
@@ -66,5 +74,26 @@ public class AdServiceImpl implements AdService {
         log.info("AdService::updateAd: ad with id {} has been updated successfully: {}", id, savedAdDto);
         log.info("AdService::updateAd execution has ended.");
         return savedAdDto;
+    }
+
+    @Override
+    @Transactional
+    public void archiveAd(String id) {
+        log.info("AdService::archiveAd execution has started.");
+        log.debug("AdService::archiveAd ad id {}", id);
+
+        Optional<Ad> adOptional = adRepository.findById(id);
+
+        if (adOptional.isEmpty()) {
+            log.error("AdService::archiveAd: Unable to archive nonexistent Ad entity with ID: {}", id);
+            throw new EntityNotFoundException("Unable to archive nonexistent Ad entity with ID: " + id);
+        }
+
+        Ad adToArchive = adOptional.get();
+        adToArchive.setStatus(AdStatus.ARCHIVED);
+        adRepository.save(adToArchive);
+
+        log.info("AdService::archiveAd: ad with id {} has been archived successfully", id);
+        log.info("AdService::archiveAd execution has ended.");
     }
 }

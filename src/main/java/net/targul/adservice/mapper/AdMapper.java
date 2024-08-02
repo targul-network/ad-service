@@ -25,6 +25,7 @@ public class AdMapper {
         }
         return AdDto.builder()
                 .id(ad.getId())
+                .status(String.valueOf(ad.getStatus()))
                 .title(ad.getTitle())
                 .description(ad.getDescription())
                 .price(ad.getPrice())

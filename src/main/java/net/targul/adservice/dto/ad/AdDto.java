@@ -7,6 +7,7 @@ import lombok.Data;
 @Builder
 public class AdDto {
     private String id;
+    private String status;
     private String title;
     private String description;
     private Double price;

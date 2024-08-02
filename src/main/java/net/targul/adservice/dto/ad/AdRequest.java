@@ -9,6 +9,7 @@ import lombok.Data;
 @Data
 @Builder
 public class AdRequest {
+
     @NotNull(message = "Title is mandatory")
     @NotBlank(message = "Title cannot be blank")
     private String title;

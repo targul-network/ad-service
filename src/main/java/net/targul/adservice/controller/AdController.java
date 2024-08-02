@@ -1,13 +1,14 @@
 package net.targul.adservice.controller;
 
-import jakarta.validation.Valid;
-
 import net.targul.adservice.dto.ad.AdRequest;
 import net.targul.adservice.dto.ad.AdDto;
 import net.targul.adservice.service.AdService;
 
+import jakarta.validation.Valid;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -44,5 +45,12 @@ public class AdController {
 
         log.info("AdController::updateAd response {}", updatedAdDto);
         return new ResponseEntity<>(updatedAdDto, HttpStatus.OK);
+    }
+
+    @PutMapping("/{id}/archive")
+    public ResponseEntity<Void> archiveAd(@PathVariable String id) {
+        log.info("AdController::archiveAd processing Ad with id: {}", id);
+        adService.archiveAd(id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

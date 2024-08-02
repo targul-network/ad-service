@@ -2,20 +2,20 @@ package net.targul.adservice.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+
 import net.targul.adservice.dto.ad.AdRequest;
 import net.targul.adservice.dto.ad.AdDto;
 import net.targul.adservice.entity.Ad;
+import net.targul.adservice.exception.EntityNotFoundException;
 import net.targul.adservice.exception.ad.AdServiceBusinessException;
 import net.targul.adservice.exception.ad.AdServiceDataException;
-import net.targul.adservice.kafka.producer.AdEventProducer;
 import net.targul.adservice.mapper.AdMapper;
 import net.targul.adservice.repository.AdRepository;
 import net.targul.adservice.service.AdService;
+
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 
 @Service
 @Slf4j
@@ -24,12 +24,6 @@ public class AdServiceImpl implements AdService {
 
     private final AdRepository adRepository;
     private final AdMapper adMapper;
-    private final AdEventProducer adEventProducer;
-
-    @Override
-    public List<AdDto> getAllAds() {
-        return null;
-    }
 
     @Override
     @Transactional
@@ -42,9 +36,6 @@ public class AdServiceImpl implements AdService {
             Ad savedAd = adRepository.save(ad);
             AdDto adDto = adMapper.toDto(savedAd);
             log.debug("AdService::createAd received response from Database {}", savedAd);
-
-            sendAdCreatedEvent(adDto);
-
             log.info("AdService::createAd execution has been ended.");
             return adDto;
         } catch (DataAccessException dae) {
@@ -56,12 +47,24 @@ public class AdServiceImpl implements AdService {
         }
     }
 
-    private void sendAdCreatedEvent(AdDto adDto) {
-        try {
-            adEventProducer.sendAdCreatedEvent(adDto);
-            log.info("AdService::sendAdCreatedEvent - Event has been sent to Kafka. Event: {}", adDto);
-        } catch (Exception e) {
-            log.error("Exception occurred while sending AdCreatedEvent to Kafka. Exception message: {}", e.getMessage());
+    @Override
+    @Transactional
+    public AdDto updateAd(String id, AdRequest adRequest) {
+        log.info("AdService::updateAd execution has started.");
+        log.debug("AdService::updateAd request parameters {}", adRequest);
+
+        if (!adRepository.existsById(id)) {
+            log.error("AdService::updateAd: Unable to update nonexistent entity with ID: {}", id);
+            throw new EntityNotFoundException("Unable to update nonexistent entity with ID: " + id);
         }
+
+        Ad updatedAd = adMapper.toEntity(adRequest);
+        updatedAd.setId(id);
+        Ad savedAd = adRepository.save(updatedAd);
+        AdDto savedAdDto = adMapper.toDto(savedAd);
+
+        log.info("AdService::updateAd: ad with id {} has been updated successfully: {}", id, savedAdDto);
+        log.info("AdService::updateAd execution has ended.");
+        return savedAdDto;
     }
 }

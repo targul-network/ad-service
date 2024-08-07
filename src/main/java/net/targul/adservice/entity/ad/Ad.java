@@ -24,6 +24,8 @@ public class Ad {
 
     private String title;
 
+    private String slug;
+
     private String description;
 
     private Double price;

@@ -8,10 +8,18 @@ import java.util.Locale;
 @Component
 public class SlugUtils {
 
+//    private final TransliterationUtils transliterationUtils;
+//
+//    public SlugUtils(TransliterationUtils transliterationUtils) {
+//        this.transliterationUtils = transliterationUtils;
+//    }
+
     public String createSlug(String input) {
         if (input == null || input.isEmpty()) {
             return "";
         }
+
+//        input = transliterationUtils.transliterateRuRoStr(input); Todo
 
         // Normalize the string to remove accents and diacritics
         String normalized = Normalizer.normalize(input, Normalizer.Form.NFD);

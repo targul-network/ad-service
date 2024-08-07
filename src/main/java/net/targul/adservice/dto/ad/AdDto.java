@@ -16,6 +16,8 @@ public class AdDto {
 
     private String title;
 
+    private String slug;
+
     private String description;
 
     private Double price;

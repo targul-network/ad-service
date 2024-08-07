@@ -11,6 +11,7 @@ import net.targul.adservice.mapper.AdMapper;
 import net.targul.adservice.repository.AdRepository;
 import net.targul.adservice.service.AdService;
 
+import net.targul.adservice.util.SlugUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataAccessException;
@@ -24,17 +25,20 @@ import java.util.Optional;
 @Service
 public class AdServiceImpl implements AdService {
     private static final Logger log = LoggerFactory.getLogger(AdServiceImpl.class);
+    private final int ADS_PER_PAGE = 50;
     private final AdRepository adRepository;
     private final AdMapper adMapper;
+    private final SlugUtils slugUtils;
 
-    public AdServiceImpl(AdRepository adRepository, AdMapper adMapper) {
+    public AdServiceImpl(AdRepository adRepository, AdMapper adMapper, SlugUtils slugUtils) {
         this.adRepository = adRepository;
         this.adMapper = adMapper;
+        this.slugUtils = slugUtils;
     }
 
     @Override
     public List<AdDto> getActiveAdsByPage(int page) {
-        Page<Ad> adsPage = adRepository.getAdsByStatus(AdStatus.ACTIVE, PageRequest.of(page, 50));
+        Page<Ad> adsPage = adRepository.getAdsByStatus(AdStatus.ACTIVE, PageRequest.of(page, ADS_PER_PAGE));
         return adsPage.stream()
                 .map(adMapper::toDto)
                 .toList();
@@ -49,6 +53,7 @@ public class AdServiceImpl implements AdService {
             Ad ad = adMapper.toEntity(adRequest);
 
             ad.setStatus(AdStatus.PENDING);
+            ad.setSlug(slugUtils.createSlug(ad.getTitle()));
 
             Ad savedAd = adRepository.save(ad);
             AdDto adDto = adMapper.toDto(savedAd);

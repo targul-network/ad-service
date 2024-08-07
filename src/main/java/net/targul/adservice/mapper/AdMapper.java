@@ -29,6 +29,7 @@ public class AdMapper {
                 .id(ad.getId())
                 .status(String.valueOf(ad.getStatus()))
                 .title(ad.getTitle())
+                .slug(ad.getSlug())
                 .description(ad.getDescription())
                 .price(ad.getPrice())
                 .imageUrls(ad.getImageUrls())

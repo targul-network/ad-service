@@ -19,6 +19,8 @@ public class Ad {
     @Id
     private String id;
 
+    private String publicId;
+
     @Builder.Default
     private AdStatus status = AdStatus.PENDING;
 

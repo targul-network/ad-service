@@ -11,6 +11,7 @@ import net.targul.adservice.mapper.AdMapper;
 import net.targul.adservice.repository.AdRepository;
 import net.targul.adservice.service.AdService;
 
+import net.targul.adservice.util.IdGenerator;
 import net.targul.adservice.util.SlugUtils;
 import net.targul.adservice.util.StringUtils;
 import org.slf4j.Logger;
@@ -54,6 +55,7 @@ public class AdServiceImpl implements AdService {
         try {
             Ad ad = adMapper.toEntity(adRequest);
 
+            ad.setPublicId(IdGenerator.generateShortId()); //added
             ad.setStatus(AdStatus.PENDING);
             ad.setTitle(StringUtils.clearExtraSpaces(ad.getTitle()));
             ad.setSlug(slugUtils.generateSlug(ad.getTitle()));

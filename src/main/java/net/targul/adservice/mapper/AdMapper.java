@@ -26,7 +26,8 @@ public class AdMapper {
             return null;
         }
         return AdDto.builder()
-                .id(ad.getId())
+                //.pid(ad.getId())
+                .pid(ad.getPublicId())
                 .status(String.valueOf(ad.getStatus()))
                 .title(ad.getTitle())
                 .slug(ad.getSlug())

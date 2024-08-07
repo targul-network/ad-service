@@ -22,19 +22,20 @@ import java.util.List;
 public class AdController {
 
     private static final Logger log = LoggerFactory.getLogger(AdController.class);
-
     private final AdService adService;
-
     public AdController(AdService adService) {
         this.adService = adService;
     }
 
-    @GetMapping("/filters")
-    public ResponseEntity<List<AdDto>> getFilteredAds(
-            @RequestParam(required = false) String price) {
-        adService.getFilteredAds();
-        // todo
-        return null;
+    @GetMapping
+    public ResponseEntity<List<AdDto>> getAllAdsByPage(@RequestParam(value = "p", defaultValue = "0") int page) {
+
+        if(page > 0) {
+            page--;
+        }
+
+        List<AdDto> adDtoList = adService.getActiveAdsByPage(page);
+        return new ResponseEntity<>(adDtoList, HttpStatus.OK);
     }
 
     @PostMapping

@@ -54,7 +54,7 @@ public class AdServiceImpl implements AdService {
             Ad ad = adMapper.toEntity(adRequest);
 
             ad.setStatus(AdStatus.PENDING);
-            ad.setSlug(slugUtils.createSlug(ad.getTitle()));
+            ad.setSlug(slugUtils.generateSlug(ad.getTitle()));
             ad.setCreatedAt(LocalDateTime.now());
 
             Ad savedAd = adRepository.save(ad);

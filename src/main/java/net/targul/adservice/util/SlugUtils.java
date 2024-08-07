@@ -1,36 +1,24 @@
 package net.targul.adservice.util;
 
+import com.ibm.icu.text.Transliterator;
 import org.springframework.stereotype.Component;
-
-import java.text.Normalizer;
-import java.util.Locale;
 
 @Component
 public class SlugUtils {
 
-//    private final TransliterationUtils transliterationUtils;
-//
-//    public SlugUtils(TransliterationUtils transliterationUtils) {
-//        this.transliterationUtils = transliterationUtils;
-//    }
+    private static final String LATIN_TO_ASCII = "Any-Latin; Latin-ASCII";
 
-    public String createSlug(String input) {
-        if (input == null || input.isEmpty()) {
-            return "";
-        }
+    public String generateSlug(String input) {
+        // Transliteration
+        Transliterator transliterator = Transliterator.getInstance(LATIN_TO_ASCII);
+        String result = transliterator.transliterate(input);
 
-//        input = transliterationUtils.transliterateRuRoStr(input); Todo
+        // Lower case
+        result = result.toLowerCase();
 
-        // Normalize the string to remove accents and diacritics
-        String normalized = Normalizer.normalize(input, Normalizer.Form.NFD);
-        // Remove non-ASCII characters and accents
-        String cleaned = normalized.replaceAll("[^\\p{ASCII}]", "");
-        // Convert to lowercase
-        String lowerCased = cleaned.toLowerCase(Locale.ENGLISH);
-        // Replace spaces and special characters with hyphens
-        String slug = lowerCased.replaceAll("[\\s+]", "-") // Replace spaces with hyphens
-                .replaceAll("[^-a-z0-9]", ""); // Remove remaining special characters
+        // Special symbols and spaces replacement on - symbol
+        result = result.replaceAll("[^a-z0-9]+", "-").replaceAll("^-|-$", "");
 
-        return slug;
+        return result;
     }
 }

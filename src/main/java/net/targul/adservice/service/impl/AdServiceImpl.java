@@ -12,6 +12,7 @@ import net.targul.adservice.repository.AdRepository;
 import net.targul.adservice.service.AdService;
 
 import net.targul.adservice.util.SlugUtils;
+import net.targul.adservice.util.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataAccessException;
@@ -54,6 +55,7 @@ public class AdServiceImpl implements AdService {
             Ad ad = adMapper.toEntity(adRequest);
 
             ad.setStatus(AdStatus.PENDING);
+            ad.setTitle(StringUtils.clearExtraSpaces(ad.getTitle()));
             ad.setSlug(slugUtils.generateSlug(ad.getTitle()));
             ad.setCreatedAt(LocalDateTime.now());
 
@@ -84,6 +86,7 @@ public class AdServiceImpl implements AdService {
         Ad updatedAd = adMapper.toEntity(adRequest);
 
         updatedAd.setId(id);
+        updatedAd.setTitle(StringUtils.clearExtraSpaces(updatedAd.getTitle()));
         updatedAd.setStatus(AdStatus.PENDING);
 
         Ad savedAd = adRepository.save(updatedAd);

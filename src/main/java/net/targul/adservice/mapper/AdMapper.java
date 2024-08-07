@@ -4,7 +4,6 @@ import net.targul.adservice.dto.ad.AdRequest;
 import net.targul.adservice.dto.ad.AdDto;
 import net.targul.adservice.entity.ad.Ad;
 
-import net.targul.adservice.util.StringUtils;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -29,7 +28,7 @@ public class AdMapper {
         return AdDto.builder()
                 .id(ad.getId())
                 .status(String.valueOf(ad.getStatus()))
-                .title(StringUtils.clearExtraSpaces(ad.getTitle()))
+                .title(ad.getTitle())
                 .slug(ad.getSlug())
                 .description(ad.getDescription())
                 .price(ad.getPrice())

@@ -14,6 +14,8 @@ import net.targul.adservice.service.AdService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataAccessException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -31,9 +33,11 @@ public class AdServiceImpl implements AdService {
     }
 
     @Override
-    public List<AdDto> getFilteredAds() {
-        // todo
-        return null;
+    public List<AdDto> getActiveAdsByPage(int page) {
+        Page<Ad> adsPage = adRepository.getAdsByStatus(AdStatus.ACTIVE, PageRequest.of(page, 50));
+        return adsPage.stream()
+                .map(adMapper::toDto)
+                .toList();
     }
 
     @Override

@@ -5,6 +5,7 @@ import lombok.Data;
 
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.LocalDateTime;
@@ -19,7 +20,8 @@ public class Ad {
     @Id
     private String id;
 
-    private String publicId;
+    @Indexed(unique = true)
+    private String shortId;
 
     @Builder.Default
     private AdStatus status = AdStatus.PENDING;

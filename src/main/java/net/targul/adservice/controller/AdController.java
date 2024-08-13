@@ -27,6 +27,12 @@ public class AdController {
         this.adService = adService;
     }
 
+    @GetMapping("/{slug}-{shortId}")
+    public ResponseEntity<AdDto> getAdBySlugAndShortId(@PathVariable String slug, @PathVariable String shortId) {
+        AdDto adDto = adService.getAdBySlugAndShortId(slug, shortId);
+        return new ResponseEntity<>(adDto, HttpStatus.OK);
+    }
+
     @GetMapping
     public ResponseEntity<List<AdDto>> getAllAdsByPage(@RequestParam(value = "p", defaultValue = "0") int page) {
 

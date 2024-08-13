@@ -11,8 +11,10 @@ import net.targul.adservice.mapper.AdMapper;
 import net.targul.adservice.repository.AdRepository;
 import net.targul.adservice.service.AdService;
 
+import net.targul.adservice.util.id.base62.impl.ObjectIdBase62;
 import net.targul.adservice.util.SlugUtils;
 import net.targul.adservice.util.StringUtils;
+import org.bson.types.ObjectId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataAccessException;
@@ -26,16 +28,36 @@ import java.util.Optional;
 
 @Service
 public class AdServiceImpl implements AdService {
+
     private static final Logger log = LoggerFactory.getLogger(AdServiceImpl.class);
     private final int ADS_PER_PAGE = 50;
     private final AdRepository adRepository;
     private final AdMapper adMapper;
     private final SlugUtils slugUtils;
+    private final ObjectIdBase62 objectIdBase62;
 
-    public AdServiceImpl(AdRepository adRepository, AdMapper adMapper, SlugUtils slugUtils) {
+    public AdServiceImpl(AdRepository adRepository, AdMapper adMapper, SlugUtils slugUtils, ObjectIdBase62 objectIdBase62) {
         this.adRepository = adRepository;
         this.adMapper = adMapper;
         this.slugUtils = slugUtils;
+        this.objectIdBase62 = objectIdBase62;
+    }
+
+    @Override
+    public AdDto getAdBySlugAndShortId(String slug, String shortId) {
+        Optional<Ad> optionalAd = adRepository.getAdByShortId(shortId);
+        if (optionalAd.isEmpty()) {
+            throw new EntityNotFoundException("Unable to find Ad entity with Short ID: " + shortId);
+        }
+
+        Ad ad = optionalAd.get();
+
+        if (!slug.equals(ad.getSlug())) {
+            // todo create special exception for such cases
+            throw new EntityNotFoundException("Invalid slug for Ad entity with shortId: " + shortId);
+        }
+
+        return adMapper.toDto(ad);
     }
 
     @Override
@@ -60,6 +82,9 @@ public class AdServiceImpl implements AdService {
             ad.setCreatedAt(LocalDateTime.now());
 
             Ad savedAd = adRepository.save(ad);
+            savedAd.setShortId(objectIdBase62.encode(new ObjectId(savedAd.getId())));
+            adRepository.save(savedAd);
+
             AdDto adDto = adMapper.toDto(savedAd);
             log.debug("AdService::createAd received response from Database {}", savedAd);
             log.info("AdService::createAd execution has been ended.");

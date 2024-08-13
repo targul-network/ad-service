@@ -7,6 +7,8 @@ import net.targul.adservice.dto.ad.AdDto;
 
 public interface AdService {
 
+    AdDto getAdBySlugAndShortId(String slug, String shortId);
+
     List<AdDto> getActiveAdsByPage(int page);
 
     AdDto createAd(AdRequest adRequest);

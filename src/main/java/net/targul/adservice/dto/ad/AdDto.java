@@ -10,7 +10,7 @@ import lombok.Data;
 @Builder
 public class AdDto {
 
-    private String id;
+    private String shortId;
 
     private String status;
 

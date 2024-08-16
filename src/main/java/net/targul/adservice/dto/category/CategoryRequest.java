@@ -13,6 +13,5 @@ public class CategoryRequest {
     @Size(min = 1, max = 100, message = "Category name length must be from 1 to 100 chars")
     private String name;
 
-    // Todo implement other Category fields
-
+    private String parentCategoryId;
 }

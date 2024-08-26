@@ -9,6 +9,7 @@ import lombok.Data;
 @Builder
 public class AdDto {
 
+    private String id;
     private String shortId;
     private String status;
     private String title;
@@ -16,5 +17,6 @@ public class AdDto {
     private String description;
     private Double price;
     private List<String> imageUrls;
+    private List<String> categoryIds;
     private LocalDateTime createdAt;
 }

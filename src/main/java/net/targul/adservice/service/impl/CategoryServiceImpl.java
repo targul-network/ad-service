@@ -10,6 +10,9 @@ import net.targul.adservice.service.CategoryService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -23,7 +26,6 @@ public class CategoryServiceImpl implements CategoryService {
         this.categoryRepository = categoryRepository;
         this.categoryMapper = categoryMapper;
     }
-
 
     @Override
     public CategoryDto createCategory(CategoryRequest request) {
@@ -45,5 +47,26 @@ public class CategoryServiceImpl implements CategoryService {
         Category savedCategory = categoryRepository.save(categoryToSave);
 
         return categoryMapper.toDto(savedCategory);
+    }
+
+    @Override
+    public List<CategoryDto> getBreadcrumbsByCategoryId(String categoryId) {
+        Optional<Category> optionalCategory = categoryRepository.findById(categoryId);
+        if(optionalCategory.isEmpty()) {
+            throw new EntityNotFoundException(String.format("Category [ID: %s] does not exist.", categoryId));
+        }
+
+        // filling breadcrumbs list
+        List<Category> breadcrumbs = new ArrayList<>();
+        Category currentCategory = optionalCategory.get();
+        while (currentCategory != null) {
+            breadcrumbs.add(currentCategory);
+            currentCategory = currentCategory.getParentCategory();
+        }
+
+        // reversing breadcrumbs and mapping categories to dto
+        return breadcrumbs.reversed().stream()
+                .map(categoryMapper::toDto)
+                .toList();
     }
 }

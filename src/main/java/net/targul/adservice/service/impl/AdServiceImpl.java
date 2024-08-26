@@ -4,11 +4,12 @@ import net.targul.adservice.dto.ad.AdRequest;
 import net.targul.adservice.dto.ad.AdDto;
 import net.targul.adservice.entity.ad.Ad;
 import net.targul.adservice.entity.ad.AdStatus;
+import net.targul.adservice.entity.category.Category;
 import net.targul.adservice.exception.EntityNotFoundException;
-import net.targul.adservice.exception.ad.AdServiceBusinessException;
-import net.targul.adservice.exception.ad.AdServiceDataException;
+import net.targul.adservice.exception.ad.AdStatusException;
 import net.targul.adservice.mapper.AdMapper;
 import net.targul.adservice.repository.AdRepository;
+import net.targul.adservice.repository.CategoryRepository;
 import net.targul.adservice.service.AdService;
 
 import net.targul.adservice.util.id.base62.impl.ObjectIdBase62;
@@ -17,12 +18,14 @@ import net.targul.adservice.util.StringUtils;
 import org.bson.types.ObjectId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.dao.DataAccessException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -32,32 +35,46 @@ public class AdServiceImpl implements AdService {
     private static final Logger log = LoggerFactory.getLogger(AdServiceImpl.class);
     private final int ADS_PER_PAGE = 50;
     private final AdRepository adRepository;
+    private final CategoryRepository categoryRepository;
     private final AdMapper adMapper;
     private final SlugUtils slugUtils;
     private final ObjectIdBase62 objectIdBase62;
 
-    public AdServiceImpl(AdRepository adRepository, AdMapper adMapper, SlugUtils slugUtils, ObjectIdBase62 objectIdBase62) {
+    public AdServiceImpl(AdRepository adRepository,
+                         CategoryRepository categoryRepository, AdMapper adMapper, SlugUtils slugUtils,
+                         ObjectIdBase62 objectIdBase62) {
         this.adRepository = adRepository;
+        this.categoryRepository = categoryRepository;
         this.adMapper = adMapper;
         this.slugUtils = slugUtils;
         this.objectIdBase62 = objectIdBase62;
     }
 
     @Override
-    public AdDto getAdBySlugAndShortId(String slug, String shortId) {
+    public ResponseEntity<AdDto> getAdBySlugAndShortId(String slug, String shortId) {
+        // getting ad from repository by shortId
         Optional<Ad> optionalAd = adRepository.getAdByShortId(shortId);
+
+        // checking if ad was found
         if (optionalAd.isEmpty()) {
             throw new EntityNotFoundException("Unable to find Ad entity with Short ID: " + shortId);
         }
 
         Ad ad = optionalAd.get();
 
-        if (!slug.equals(ad.getSlug())) {
-            // todo create special exception for such cases
-            throw new EntityNotFoundException("Invalid slug for Ad entity with shortId: " + shortId);
+        // checking if ad has accepted status to be shown
+        AdStatus adStatus = ad.getStatus();
+        if(adStatus.equals(AdStatus.PENDING) || adStatus.equals(AdStatus.BANNED)) {
+            throw new AdStatusException("Access to this Ad is currently forbidden. Ad status: " + adStatus);
         }
 
-        return adMapper.toDto(ad);
+        // TODO check if the found ad by short id has the same slug as in url
+//        if (!slug.equals(ad.getSlug())) {
+//            String correctUrl = String.format("ads/%s-%s", ad.getSlug(), shortId);
+//            return ResponseEntity.status(HttpStatus.MOVED_PERMANENTLY).header("Location", correctUrl).build();
+//        }
+
+        return new ResponseEntity<>(adMapper.toDto(ad), HttpStatus.OK);
     }
 
     @Override
@@ -73,29 +90,34 @@ public class AdServiceImpl implements AdService {
         log.info("AdService::createAd execution has been started.");
         log.debug("AdService::createAd request parameters {}", adRequest);
 
-        try {
-            Ad ad = adMapper.toEntity(adRequest);
+        Ad ad = adMapper.toEntity(adRequest);
 
-            ad.setStatus(AdStatus.PENDING);
-            ad.setTitle(StringUtils.clearExtraSpaces(ad.getTitle()));
-            ad.setSlug(slugUtils.generateSlug(ad.getTitle()));
-            ad.setCreatedAt(LocalDateTime.now());
+        ad.setStatus(AdStatus.PENDING);
+        ad.setTitle(StringUtils.clearExtraSpaces(ad.getTitle()));
+        ad.setSlug(slugUtils.generateSlug(ad.getTitle()));
+        ad.setCreatedAt(LocalDateTime.now());
 
-            Ad savedAd = adRepository.save(ad);
-            savedAd.setShortId(objectIdBase62.encode(new ObjectId(savedAd.getId())));
-            adRepository.save(savedAd);
-
-            AdDto adDto = adMapper.toDto(savedAd);
-            log.debug("AdService::createAd received response from Database {}", savedAd);
-            log.info("AdService::createAd execution has been ended.");
-            return adDto;
-        } catch (DataAccessException dae) {
-            log.error("Database exception occurred while persisting product: {}", dae.getMessage());
-            throw new AdServiceDataException("Database exception occurred while creating new ad", dae);
-        } catch (Exception e) {
-            log.error("Unexpected exception occurred while creating ad: {}", e.getMessage());
-            throw new AdServiceBusinessException("Unexpected exception occurred while creating new ad", e);
+        // checking if every category exists
+        List<Category> adCategories = new ArrayList<>();
+        for(String categoryId : adRequest.getCategoryIds()) {
+            Optional<Category> optionalCategory = categoryRepository.findById(categoryId);
+            if(optionalCategory.isPresent()) {
+                adCategories.add(optionalCategory.get());
+            } else {
+                throw new EntityNotFoundException("Category with ID: " + categoryId + " does not exist.");
+            }
         }
+        // set category ids if all of them exist
+        ad.setCategoryIds(adCategories);
+
+        Ad savedAd = adRepository.save(ad);
+        savedAd.setShortId(objectIdBase62.encode(new ObjectId(savedAd.getId())));
+        adRepository.save(savedAd);
+
+        AdDto adDto = adMapper.toDto(savedAd);
+        log.debug("AdService::createAd received response from Database {}", savedAd);
+        log.info("AdService::createAd execution has been ended.");
+        return adDto;
     }
 
     @Override
@@ -123,17 +145,24 @@ public class AdServiceImpl implements AdService {
     }
 
     @Override
-    public void activateAd(String id) {
+    public ResponseEntity<String> activateAd(String id) {
         Optional<Ad> adOptional = adRepository.findById(id);
         if (adOptional.isEmpty()) {
             throw new EntityNotFoundException("Unable to activate nonexistent Ad entity with ID: " + id);
         }
 
-        Ad adToArchive = adOptional.get();
+        Ad adToActivate = adOptional.get();
 
-        if(!adToArchive.getStatus().equals(AdStatus.ACTIVE)) {
-            adToArchive.setStatus(AdStatus.ACTIVE);
-            adRepository.save(adToArchive);
+        if(adToActivate.getStatus().equals(AdStatus.ACTIVE)) {
+            // if ad status is already ACTIVE
+            String message = String.format("Ad [ID: %s] is already activated.", adToActivate.getId());
+            return new ResponseEntity<>(message, HttpStatus.NOT_MODIFIED);
+        } else {
+            // if ad status is not ACTIVE
+            adToActivate.setStatus(AdStatus.ACTIVE);
+            adRepository.save(adToActivate);
+            String message = String.format("Ad [ID: %s] was activated successfully.", adToActivate.getId());
+            return new ResponseEntity<>(message, HttpStatus.NO_CONTENT);
         }
     }
 

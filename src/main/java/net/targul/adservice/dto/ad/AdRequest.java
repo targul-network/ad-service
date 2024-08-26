@@ -27,4 +27,9 @@ public class AdRequest {
     @NotEmpty(message = "Image URLs list cannot be blank")
     @Size(max = 10, message = "Image URLs list cannot contain more than 10 urls")
     private List<String> imageUrls;
+
+    @NotNull
+    @NotEmpty
+    @Size(min = 1, message = "Ad must be linked to at least one category")
+    private List<String> categoryIds;
 }

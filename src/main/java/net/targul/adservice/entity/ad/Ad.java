@@ -37,7 +37,8 @@ public class Ad {
     private Double price;
 
     @DBRef
-    private Category category;
+    @Builder.Default
+    private List<Category> categoryIds = new ArrayList<>();
 
     @Builder.Default
     private List<String> imageUrls = new ArrayList<>();

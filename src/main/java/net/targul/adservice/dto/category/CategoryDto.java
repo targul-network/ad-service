@@ -9,5 +9,5 @@ public class CategoryDto {
 
     private String id;
     private String name;
-    private CategoryDto parentCategory;
+    private String parentCategoryId;
 }

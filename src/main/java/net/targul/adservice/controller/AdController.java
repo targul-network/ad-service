@@ -23,14 +23,14 @@ public class AdController {
 
     private static final Logger log = LoggerFactory.getLogger(AdController.class);
     private final AdService adService;
+
     public AdController(AdService adService) {
         this.adService = adService;
     }
 
     @GetMapping("/{slug}-{shortId}")
     public ResponseEntity<AdDto> getAdBySlugAndShortId(@PathVariable String slug, @PathVariable String shortId) {
-        AdDto adDto = adService.getAdBySlugAndShortId(slug, shortId);
-        return new ResponseEntity<>(adDto, HttpStatus.OK);
+        return adService.getAdBySlugAndShortId(slug, shortId);
     }
 
     @GetMapping
@@ -65,29 +65,28 @@ public class AdController {
     }
 
     @PutMapping("/{id}/activate")
-    public ResponseEntity<Void> activateAd(@PathVariable String id) {
-        adService.activateAd(id);
-        return new ResponseEntity<>(HttpStatus.OK);
+    public ResponseEntity<String> activateAd(@PathVariable String id) {
+        return adService.activateAd(id);
     }
 
     @PutMapping("/{id}/deactivate")
     public ResponseEntity<Void> deactivateAd(@PathVariable String id) {
         adService.deactivateAd(id);
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @PutMapping("/{id}/archive")
     public ResponseEntity<Void> archiveAd(@PathVariable String id) {
         log.info("AdController::archiveAd is processing Ad with id: {}", id);
         adService.archiveAd(id);
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @PutMapping("/{id}/ban")
     public ResponseEntity<Void> banAd(@PathVariable String id) {
         log.info("AdController::banAd is processing Ad with id: {}", id);
         adService.banAd(id);
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @DeleteMapping("/{id}")

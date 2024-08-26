@@ -19,6 +19,7 @@ public class CategoryMapper {
         return CategoryDto.builder()
                 .id(category.getId())
                 .name(category.getName())
+                .slug(category.getSlug())
                 .parentCategoryId(parentCategory != null ? parentCategory.getId() : null)
                 .build();
     }

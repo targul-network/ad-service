@@ -4,9 +4,11 @@ import net.targul.adservice.dto.category.CategoryDto;
 import net.targul.adservice.dto.category.CategoryRequest;
 import net.targul.adservice.entity.category.Category;
 import net.targul.adservice.exception.EntityNotFoundException;
+import net.targul.adservice.exception.UniqueValueException;
 import net.targul.adservice.mapper.CategoryMapper;
 import net.targul.adservice.repository.CategoryRepository;
 import net.targul.adservice.service.CategoryService;
+import net.targul.adservice.util.SlugUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -21,10 +23,12 @@ public class CategoryServiceImpl implements CategoryService {
     private static final Logger log = LoggerFactory.getLogger(CategoryServiceImpl.class);
     private final CategoryRepository categoryRepository;
     private final CategoryMapper categoryMapper;
+    private final SlugUtils slugUtils;
 
-    public CategoryServiceImpl(CategoryRepository categoryRepository, CategoryMapper categoryMapper) {
+    public CategoryServiceImpl(CategoryRepository categoryRepository, CategoryMapper categoryMapper, SlugUtils slugUtils) {
         this.categoryRepository = categoryRepository;
         this.categoryMapper = categoryMapper;
+        this.slugUtils = slugUtils;
     }
 
     @Override
@@ -40,12 +44,20 @@ public class CategoryServiceImpl implements CategoryService {
                         String.format("No parent category entity with ID: [%s] found.", parentCategoryId)
                 );
             }
-
             categoryToSave.setParentCategory(optionalParentCategory.get());
         }
 
-        Category savedCategory = categoryRepository.save(categoryToSave);
+        // generating a slug from category name
+        String nameSlug = slugUtils.generateSlug(request.getName());
 
+        // checking the possibility of creating a unique slug from name
+        if(categoryRepository.existsBySlug(nameSlug)) {
+           throw new UniqueValueException(String.format("Category [slug: %s] already exists.", nameSlug));
+        } else {
+            categoryToSave.setSlug(nameSlug);
+        }
+
+        Category savedCategory = categoryRepository.save(categoryToSave);
         return categoryMapper.toDto(savedCategory);
     }
 

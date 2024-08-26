@@ -1,6 +1,7 @@
 package net.targul.adservice.handler;
 
 import net.targul.adservice.exception.EntityNotFoundException;
+import net.targul.adservice.exception.UniqueValueException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
@@ -17,6 +18,12 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(EntityNotFoundException.class)
     public ResponseEntity<String> handleEntityNotFoundException(EntityNotFoundException e) {
         return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(UniqueValueException.class)
+    public ResponseEntity<String> handleUniqueValueException(UniqueValueException ex) {
+        String errorMessage = "Value must be unique: " + ex.getMessage();
+        return new ResponseEntity<>(errorMessage, HttpStatus.CONFLICT);
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)

@@ -25,10 +25,28 @@ public class CategoryController {
         this.categoryService = categoryService;
     }
 
+    @GetMapping("/{categoryId}/subcategories")
+    public ResponseEntity<List<CategoryDto>> getSubcategories(@PathVariable String categoryId) {
+        List<CategoryDto> subcategories = categoryService.getSubcategoriesByParentCategoryId(categoryId);
+
+        // if no subcategories found - return code 204 "No content"
+        if(subcategories.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+
+        return ResponseEntity.ok(subcategories);
+    }
+
+    @GetMapping("/root")
+    public ResponseEntity<List<CategoryDto>> getRootCategories() {
+        List<CategoryDto> rootCategories = categoryService.getRootCategories();
+        return ResponseEntity.ok(rootCategories);
+    }
+
     @GetMapping("/{categoryId}/breadcrumbs")
     public ResponseEntity<List<CategoryDto>> getBreadcrumbsByCategoryId(@PathVariable String categoryId) {
         List<CategoryDto> breadcrumbs = categoryService.getBreadcrumbsByCategoryId(categoryId);
-        return new ResponseEntity<>(breadcrumbs, HttpStatus.OK);
+        return ResponseEntity.ok(breadcrumbs);
     }
 
     @PostMapping

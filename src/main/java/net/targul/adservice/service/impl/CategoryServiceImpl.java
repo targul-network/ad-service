@@ -81,4 +81,20 @@ public class CategoryServiceImpl implements CategoryService {
                 .map(categoryMapper::toDto)
                 .toList();
     }
+
+    @Override
+    public List<CategoryDto> getRootCategories() {
+        List<Category> rootCategories = categoryRepository.findAllByParentCategoryIsNull();
+        return rootCategories.stream()
+                .map(categoryMapper::toDto)
+                .toList();
+    }
+
+    @Override
+    public List<CategoryDto> getSubcategoriesByParentCategoryId(String parentCategoryId) {
+        List<Category> subcategories = categoryRepository.findAllByParentCategoryId(parentCategoryId);
+        return subcategories.stream()
+                .map(categoryMapper::toDto)
+                .toList();
+    }
 }

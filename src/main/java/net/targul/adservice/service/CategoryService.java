@@ -9,4 +9,6 @@ public interface CategoryService {
 
     CategoryDto createCategory(CategoryRequest request);
     List<CategoryDto> getBreadcrumbsByCategoryId(String categoryId);
+    List<CategoryDto> getRootCategories();
+    List<CategoryDto> getSubcategoriesByParentCategoryId(String parentCategoryId);
 }

@@ -10,5 +10,6 @@ public class CategoryDto {
     private String id;
     private String name;
     private String slug;
+    private String imageUrl;
     private String parentCategoryId;
 }

@@ -16,5 +16,6 @@ public class Category {
     private String name;
     @Indexed(unique = true)
     private String slug;
+    private String imageUrl;
     private Category parentCategory;
 }

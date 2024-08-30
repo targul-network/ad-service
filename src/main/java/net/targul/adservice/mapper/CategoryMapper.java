@@ -11,6 +11,7 @@ public class CategoryMapper {
     public Category toEntity(CategoryRequest categoryRequest) {
         return Category.builder()
                 .name(categoryRequest.getName())
+                .imageUrl(categoryRequest.getImageUrl())
                 .build();
     }
 
@@ -20,6 +21,7 @@ public class CategoryMapper {
                 .id(category.getId())
                 .name(category.getName())
                 .slug(category.getSlug())
+                .imageUrl(category.getImageUrl() != null ? category.getImageUrl() : null)
                 .parentCategoryId(parentCategory != null ? parentCategory.getId() : null)
                 .build();
     }

@@ -1,6 +1,9 @@
+app:
+  ads:
+    per-page: 20
+
 server:
   port: 8001
-
   servlet:
     context-path: /api/v1
 

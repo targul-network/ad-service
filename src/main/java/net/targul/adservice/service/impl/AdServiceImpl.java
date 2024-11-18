@@ -41,7 +41,7 @@ public class AdServiceImpl implements AdService {
     private final SlugUtils slugUtils;
     private final ObjectIdBase62 objectIdBase62;
 
-    public AdServiceImpl(@Value("${application.ads.perPage}") int adsPerPage, AdRepository adRepository,
+    public AdServiceImpl(@Value("${app.ads.per-page}") int adsPerPage, AdRepository adRepository,
                          CategoryRepository categoryRepository, AdMapper adMapper, SlugUtils slugUtils,
                          ObjectIdBase62 objectIdBase62) {
         ADS_PER_PAGE = adsPerPage;

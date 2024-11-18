@@ -1,4 +1,4 @@
-package net.targul.adservice.controller;
+package net.targul.adservice.web;
 
 import net.targul.adservice.dto.ad.AdRequest;
 import net.targul.adservice.dto.ad.AdDto;

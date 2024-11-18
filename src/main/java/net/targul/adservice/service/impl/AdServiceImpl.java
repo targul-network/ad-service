@@ -2,11 +2,11 @@ package net.targul.adservice.service.impl;
 
 import net.targul.adservice.dto.ad.AdRequest;
 import net.targul.adservice.dto.ad.AdDto;
-import net.targul.adservice.entity.ad.Ad;
-import net.targul.adservice.entity.ad.AdStatus;
-import net.targul.adservice.entity.category.Category;
-import net.targul.adservice.exception.EntityNotFoundException;
-import net.targul.adservice.exception.ad.AdStatusException;
+import net.targul.adservice.domain.ad.Ad;
+import net.targul.adservice.domain.ad.AdStatus;
+import net.targul.adservice.domain.Category;
+import net.targul.adservice.service.exception.EntityNotFoundException;
+import net.targul.adservice.service.exception.ad.AdStatusException;
 import net.targul.adservice.mapper.AdMapper;
 import net.targul.adservice.repository.AdRepository;
 import net.targul.adservice.repository.CategoryRepository;
@@ -18,6 +18,7 @@ import net.targul.adservice.util.StringUtils;
 import org.bson.types.ObjectId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
@@ -33,16 +34,17 @@ import java.util.Optional;
 public class AdServiceImpl implements AdService {
 
     private static final Logger log = LoggerFactory.getLogger(AdServiceImpl.class);
-    private final int ADS_PER_PAGE = 50;
+    private final int ADS_PER_PAGE;
     private final AdRepository adRepository;
     private final CategoryRepository categoryRepository;
     private final AdMapper adMapper;
     private final SlugUtils slugUtils;
     private final ObjectIdBase62 objectIdBase62;
 
-    public AdServiceImpl(AdRepository adRepository,
+    public AdServiceImpl(@Value("${application.ads.perPage}") int adsPerPage, AdRepository adRepository,
                          CategoryRepository categoryRepository, AdMapper adMapper, SlugUtils slugUtils,
                          ObjectIdBase62 objectIdBase62) {
+        ADS_PER_PAGE = adsPerPage;
         this.adRepository = adRepository;
         this.categoryRepository = categoryRepository;
         this.adMapper = adMapper;

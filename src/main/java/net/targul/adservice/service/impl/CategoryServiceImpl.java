@@ -1,16 +1,15 @@
 package net.targul.adservice.service.impl;
 
+import lombok.extern.slf4j.Slf4j;
 import net.targul.adservice.dto.category.CategoryDto;
 import net.targul.adservice.dto.category.CategoryRequest;
-import net.targul.adservice.entity.category.Category;
-import net.targul.adservice.exception.EntityNotFoundException;
-import net.targul.adservice.exception.UniqueValueException;
+import net.targul.adservice.domain.Category;
+import net.targul.adservice.service.exception.EntityNotFoundException;
+import net.targul.adservice.service.exception.UniqueValueException;
 import net.targul.adservice.mapper.CategoryMapper;
 import net.targul.adservice.repository.CategoryRepository;
 import net.targul.adservice.service.CategoryService;
 import net.targul.adservice.util.SlugUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -18,9 +17,9 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@Slf4j
 public class CategoryServiceImpl implements CategoryService {
 
-    private static final Logger log = LoggerFactory.getLogger(CategoryServiceImpl.class);
     private final CategoryRepository categoryRepository;
     private final CategoryMapper categoryMapper;
     private final SlugUtils slugUtils;

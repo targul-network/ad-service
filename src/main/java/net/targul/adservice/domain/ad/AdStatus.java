@@ -1,4 +1,4 @@
-package net.targul.adservice.entity.ad;
+package net.targul.adservice.domain.ad;
 
 public enum AdStatus {
     PENDING,

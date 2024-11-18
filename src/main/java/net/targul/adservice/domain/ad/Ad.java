@@ -1,9 +1,9 @@
-package net.targul.adservice.entity.ad;
+package net.targul.adservice.domain.ad;
 
 import lombok.Builder;
 import lombok.Data;
 
-import net.targul.adservice.entity.category.Category;
+import net.targul.adservice.domain.Category;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;

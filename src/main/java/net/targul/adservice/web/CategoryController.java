@@ -1,11 +1,10 @@
-package net.targul.adservice.controller;
+package net.targul.adservice.web;
 
 import jakarta.validation.Valid;
+import lombok.extern.slf4j.Slf4j;
 import net.targul.adservice.dto.category.CategoryDto;
 import net.targul.adservice.dto.category.CategoryRequest;
 import net.targul.adservice.service.impl.CategoryServiceImpl;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -16,9 +15,9 @@ import java.util.List;
 @RestController
 @RequestMapping("/categories")
 @Validated
+@Slf4j
 public class CategoryController {
 
-    private static final Logger log = LoggerFactory.getLogger(CategoryController.class);
     private final CategoryServiceImpl categoryService;
 
     public CategoryController(CategoryServiceImpl categoryService) {

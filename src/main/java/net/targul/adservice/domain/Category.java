@@ -1,4 +1,4 @@
-package net.targul.adservice.entity.category;
+package net.targul.adservice.domain;
 
 import lombok.Builder;
 import lombok.Data;

@@ -2,9 +2,9 @@ package net.targul.adservice.mapper;
 
 import net.targul.adservice.dto.ad.AdRequest;
 import net.targul.adservice.dto.ad.AdDto;
-import net.targul.adservice.entity.ad.Ad;
+import net.targul.adservice.domain.ad.Ad;
 
-import net.targul.adservice.entity.category.Category;
+import net.targul.adservice.domain.Category;
 import org.springframework.stereotype.Component;
 
 @Component

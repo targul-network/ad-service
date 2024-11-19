@@ -6,7 +6,7 @@ import net.targul.adservice.domain.ad.Ad;
 import net.targul.adservice.domain.ad.AdStatus;
 import net.targul.adservice.domain.Category;
 import net.targul.adservice.service.exception.EntityNotFoundException;
-import net.targul.adservice.service.exception.ad.AdStatusException;
+import net.targul.adservice.service.exception.AdStatusException;
 import net.targul.adservice.mapper.AdMapper;
 import net.targul.adservice.repository.AdRepository;
 import net.targul.adservice.repository.CategoryRepository;

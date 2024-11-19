@@ -21,7 +21,7 @@ import lombok.extern.slf4j.Slf4j;
 import net.targul.adservice.dto.ParamsViolationDetails;
 import net.targul.adservice.service.exception.EntityNotFoundException;
 import net.targul.adservice.service.exception.UniqueValueException;
-import net.targul.adservice.service.exception.ad.AdStatusException;
+import net.targul.adservice.service.exception.AdStatusException;
 
 @ControllerAdvice
 @Slf4j

@@ -1,7 +1,3 @@
-app:
-  ads:
-    per-page: 20
-
 server:
   port: 8001
   servlet:
@@ -10,12 +6,16 @@ server:
 spring:
   application:
     name: ad-service
+  datasource:
+    url: jdbc:postgresql://localhost:5432/trgladservicedb
+    username: postgres
+    password: secret
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: false
 
-  data:
-    mongodb:
-      host: localhost
-      port: 27017
-      authentication-database: admin
-      username: root
-      password: example
-      database: adservicedb
+app:
+  ads:
+    per-page: 20

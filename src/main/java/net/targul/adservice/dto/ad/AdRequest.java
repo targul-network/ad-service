@@ -2,8 +2,11 @@ package net.targul.adservice.dto.ad;
 
 import jakarta.validation.constraints.*;
 import java.util.List;
+import java.util.UUID;
+
 import lombok.Builder;
 import lombok.Data;
+import org.hibernate.validator.constraints.URL;
 
 @Data
 @Builder
@@ -26,10 +29,11 @@ public class AdRequest {
     @NotNull(message = "Image URLs list is mandatory")
     @NotEmpty(message = "Image URLs list cannot be blank")
     @Size(max = 10, message = "Image URLs list cannot contain more than 10 urls")
-    private List<String> imageUrls;
+    private List<@NotNull(message = "Value for Image URL cannot be null")
+                 @URL(message = "Invalid value for Image URL") String> imageUrls;
 
     @NotNull
     @NotEmpty
     @Size(min = 1, message = "Ad must be linked to at least one category")
-    private List<String> categoryIds;
+    private List<UUID> categoryIds;
 }

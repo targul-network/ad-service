@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 @Slf4j
@@ -34,7 +35,7 @@ public class CategoryServiceImpl implements CategoryService {
     public CategoryDto createCategory(CategoryRequest request) {
         Category categoryToSave = categoryMapper.toEntity(request);
 
-        String parentCategoryId = request.getParentCategoryId();
+        UUID parentCategoryId = request.getParentCategoryId();
         if (parentCategoryId != null) {
             Optional<Category> optionalParentCategory = categoryRepository.findById(parentCategoryId);
 
@@ -61,7 +62,7 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public List<CategoryDto> getBreadcrumbsByCategoryId(String categoryId) {
+    public List<CategoryDto> getBreadcrumbsByCategoryId(UUID categoryId) {
         Optional<Category> optionalCategory = categoryRepository.findById(categoryId);
         if(optionalCategory.isEmpty()) {
             throw new EntityNotFoundException(String.format("Category [ID: %s] does not exist.", categoryId));
@@ -90,7 +91,7 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public List<CategoryDto> getSubcategoriesByParentCategoryId(String parentCategoryId) {
+    public List<CategoryDto> getSubcategoriesByParentCategoryId(UUID parentCategoryId) {
         List<Category> subcategories = categoryRepository.findAllByParentCategoryId(parentCategoryId);
         return subcategories.stream()
                 .map(categoryMapper::toDto)

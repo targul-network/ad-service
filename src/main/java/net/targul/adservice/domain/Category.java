@@ -1,21 +1,40 @@
 package net.targul.adservice.domain;
 
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.index.Indexed;
-import org.springframework.data.mongodb.core.mapping.Document;
+import lombok.NoArgsConstructor;
+import net.targul.adservice.domain.ad.Ad;
+
+import java.util.List;
+import java.util.UUID;
 
 @Data
 @Builder
-@Document(collection = "categories")
+@Entity
+@Table(name = "categories")
+@NoArgsConstructor
+@AllArgsConstructor
 public class Category {
 
     @Id
-    private String id;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private UUID id;
+
     private String name;
-    @Indexed(unique = true)
+
+    @Column(unique = true)
     private String slug;
     private String imageUrl;
+
+    @ManyToOne
+    @JoinColumn(name = "parent_id")
     private Category parentCategory;
+
+    @OneToMany(mappedBy = "parentCategory")
+    private List<Category> subcategories;
+
+    @ManyToMany(mappedBy = "categories")
+    private List<Ad> ads;
 }

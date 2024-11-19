@@ -1,5 +1,6 @@
 package net.targul.adservice.service.impl;
 
+import lombok.extern.slf4j.Slf4j;
 import net.targul.adservice.dto.ad.AdRequest;
 import net.targul.adservice.dto.ad.AdDto;
 import net.targul.adservice.domain.ad.Ad;
@@ -16,8 +17,6 @@ import net.targul.adservice.util.id.base62.impl.ObjectIdBase62;
 import net.targul.adservice.util.SlugUtils;
 import net.targul.adservice.util.StringUtils;
 import org.bson.types.ObjectId;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -29,11 +28,12 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
+@Slf4j
 public class AdServiceImpl implements AdService {
 
-    private static final Logger log = LoggerFactory.getLogger(AdServiceImpl.class);
     private final int ADS_PER_PAGE;
     private final AdRepository adRepository;
     private final CategoryRepository categoryRepository;
@@ -101,7 +101,7 @@ public class AdServiceImpl implements AdService {
 
         // checking if every category exists
         List<Category> adCategories = new ArrayList<>();
-        for(String categoryId : adRequest.getCategoryIds()) {
+        for(UUID categoryId : adRequest.getCategoryIds()) {
             Optional<Category> optionalCategory = categoryRepository.findById(categoryId);
             if(optionalCategory.isPresent()) {
                 adCategories.add(optionalCategory.get());
@@ -110,10 +110,10 @@ public class AdServiceImpl implements AdService {
             }
         }
         // set category ids if all of them exist
-        ad.setCategoryIds(adCategories);
+        ad.setCategories(adCategories);
 
         Ad savedAd = adRepository.save(ad);
-        savedAd.setShortId(objectIdBase62.encode(new ObjectId(savedAd.getId())));
+        savedAd.setShortId(objectIdBase62.encode(new ObjectId(savedAd.getId().toString())));
         adRepository.save(savedAd);
 
         AdDto adDto = adMapper.toDto(savedAd);
@@ -123,7 +123,7 @@ public class AdServiceImpl implements AdService {
     }
 
     @Override
-    public AdDto updateAd(String id, AdRequest adRequest) {
+    public AdDto updateAd(UUID id, AdRequest adRequest) {
         log.info("AdService::updateAd execution has started.");
         log.debug("AdService::updateAd request parameters {}", adRequest);
 
@@ -147,7 +147,7 @@ public class AdServiceImpl implements AdService {
     }
 
     @Override
-    public ResponseEntity<String> activateAd(String id) {
+    public ResponseEntity<String> activateAd(UUID id) {
         Optional<Ad> adOptional = adRepository.findById(id);
         if (adOptional.isEmpty()) {
             throw new EntityNotFoundException("Unable to activate nonexistent Ad entity with ID: " + id);
@@ -169,7 +169,7 @@ public class AdServiceImpl implements AdService {
     }
 
     @Override
-    public void deactivateAd(String id) {
+    public void deactivateAd(UUID id) {
         Optional<Ad> adOptional = adRepository.findById(id);
         if (adOptional.isEmpty()) {
             throw new EntityNotFoundException("Unable to deactivate nonexistent Ad entity with ID: " + id);
@@ -184,7 +184,7 @@ public class AdServiceImpl implements AdService {
     }
 
     @Override
-    public void archiveAd(String id) {
+    public void archiveAd(UUID id) {
         log.info("AdService::archiveAd execution has started.");
         log.debug("AdService::archiveAd ad id {}", id);
 
@@ -204,7 +204,7 @@ public class AdServiceImpl implements AdService {
     }
 
     @Override
-    public void banAd(String id) {
+    public void banAd(UUID id) {
         Optional<Ad> adOptional = adRepository.findById(id);
         if (adOptional.isEmpty()) {
             throw new EntityNotFoundException("Unable to ban nonexistent Ad entity with ID: " + id);
@@ -219,7 +219,7 @@ public class AdServiceImpl implements AdService {
     }
 
     @Override
-    public void deleteAd(String id) {
+    public void deleteAd(UUID id) {
 
         if (adRepository.existsById(id)) {
             adRepository.deleteById(id);

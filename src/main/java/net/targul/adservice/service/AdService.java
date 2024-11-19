@@ -1,6 +1,7 @@
 package net.targul.adservice.service;
 
 import java.util.List;
+import java.util.UUID;
 
 import net.targul.adservice.dto.ad.AdRequest;
 import net.targul.adservice.dto.ad.AdDto;
@@ -14,15 +15,15 @@ public interface AdService {
 
     AdDto createAd(AdRequest adRequest);
 
-    AdDto updateAd(String id, AdRequest adRequest);
+    AdDto updateAd(UUID id, AdRequest adRequest);
 
-    ResponseEntity<String> activateAd(String id);
+    ResponseEntity<String> activateAd(UUID id);
 
-    void deactivateAd(String id);
+    void deactivateAd(UUID id);
 
-    void archiveAd(String id);
+    void archiveAd(UUID id);
 
-    void banAd(String id);
+    void banAd(UUID id);
 
-    void deleteAd(String id);
+    void deleteAd(UUID id);
 }

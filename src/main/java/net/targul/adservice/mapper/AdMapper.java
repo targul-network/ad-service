@@ -7,6 +7,8 @@ import net.targul.adservice.domain.ad.Ad;
 import net.targul.adservice.domain.Category;
 import org.springframework.stereotype.Component;
 
+import java.util.UUID;
+
 @Component
 public class AdMapper {
 
@@ -27,7 +29,7 @@ public class AdMapper {
             return null;
         }
         return AdDto.builder()
-                .id(ad.getId())
+                .id(ad.getId().toString())
                 .shortId(ad.getShortId())
                 .status(String.valueOf(ad.getStatus()))
                 .title(ad.getTitle())
@@ -35,7 +37,7 @@ public class AdMapper {
                 .description(ad.getDescription())
                 .price(ad.getPrice())
                 .imageUrls(ad.getImageUrls())
-                .categoryIds(ad.getCategoryIds().stream().map(Category::getId).toList())
+                .categoryIds(ad.getCategories().stream().map(Category::getId).map(UUID::toString).toList())
                 .createdAt(ad.getCreatedAt())
                 .build();
     }

@@ -1,48 +1,55 @@
 package net.targul.adservice.domain.ad;
 
+import jakarta.persistence.*;
+import jdk.jfr.Timestamp;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 
+import lombok.NoArgsConstructor;
 import net.targul.adservice.domain.Category;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.index.Indexed;
-import org.springframework.data.mongodb.core.mapping.DBRef;
-import org.springframework.data.mongodb.core.mapping.Document;
+import net.targul.adservice.repository.converter.StringListConverter;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
+@Entity
+@Table(name = "ads")
 @Data
 @Builder
-@Document(collection = "ads")
+@NoArgsConstructor
+@AllArgsConstructor
 public class Ad {
 
     @Id
-    private String id;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private UUID id;
 
-    @Indexed(unique = true)
+    @Column(unique = true)
     private String shortId;
 
+    @Enumerated(EnumType.STRING)
     @Builder.Default
     private AdStatus status = AdStatus.PENDING;
 
     private String title;
-
     private String slug;
-
     private String description;
-
     private Double price;
 
-    @DBRef
-    @Builder.Default
-    private List<Category> categoryIds = new ArrayList<>();
+    @ManyToMany
+    @JoinTable(
+            name = "ad_categories",
+            joinColumns = @JoinColumn(name = "ad_id"),
+            inverseJoinColumns = @JoinColumn(name = "category_id")
+    )
+    private List<Category> categories;
 
-    @Builder.Default
-    private List<String> imageUrls = new ArrayList<>();
+    @Column(columnDefinition = "jsonb")
+    @Convert(converter = StringListConverter.class)
+    private List<String> imageUrls;
 
-    @CreatedDate
+    @Timestamp
     private LocalDateTime createdAt;
 }

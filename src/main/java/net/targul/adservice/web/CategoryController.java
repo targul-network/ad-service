@@ -27,12 +27,6 @@ public class CategoryController {
     @GetMapping("/{categoryId}/subcategories")
     public ResponseEntity<List<CategoryDto>> getSubcategories(@PathVariable String categoryId) {
         List<CategoryDto> subcategories = categoryService.getSubcategoriesByParentCategoryId(categoryId);
-
-        // if no subcategories found - return code 204 "No content"
-        if(subcategories.isEmpty()) {
-            return ResponseEntity.noContent().build();
-        }
-
         return ResponseEntity.ok(subcategories);
     }
 

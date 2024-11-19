@@ -1,27 +1,26 @@
 package net.targul.adservice.web;
 
+import java.util.List;
+
+import lombok.extern.slf4j.Slf4j;
+
 import net.targul.adservice.dto.ad.AdRequest;
 import net.targul.adservice.dto.ad.AdDto;
 import net.targul.adservice.service.AdService;
 
 import jakarta.validation.Valid;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @RestController
 @RequestMapping("/ads")
 @Validated
+@Slf4j
 public class AdController {
 
-    private static final Logger log = LoggerFactory.getLogger(AdController.class);
     private final AdService adService;
 
     public AdController(AdService adService) {
@@ -35,12 +34,7 @@ public class AdController {
 
     @GetMapping
     public ResponseEntity<List<AdDto>> getAllAdsByPage(@RequestParam(value = "p", defaultValue = "0") int page) {
-
-        if(page > 0) {
-            page--;
-        }
-
-        List<AdDto> adDtoList = adService.getActiveAdsByPage(page);
+        List<AdDto> adDtoList = adService.getActiveAdsByPage(--page);
         return new ResponseEntity<>(adDtoList, HttpStatus.OK);
     }
 

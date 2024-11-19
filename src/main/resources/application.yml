@@ -6,11 +6,13 @@ server:
 spring:
   application:
     name: ad-service
+
   datasource:
     url: jdbc:postgresql://localhost:5432/trgladservicedb
     username: postgres
     password: secret
     driver-class-name: org.postgresql.Driver
+
   jpa:
     hibernate:
       ddl-auto: create-drop

@@ -1,0 +1,21 @@
+app:
+  ads:
+    per-page: 20
+
+server:
+  port: 8001
+  servlet:
+    context-path: /api/v1
+
+spring:
+  application:
+    name: ad-service
+
+  data:
+    mongodb:
+      host: localhost
+      port: 27017
+      authentication-database: admin
+      username: root
+      password: example
+      database: adservicedb

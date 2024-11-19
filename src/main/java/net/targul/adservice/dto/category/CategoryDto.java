@@ -1,15 +1,15 @@
 package net.targul.adservice.dto.category;
 
 import lombok.Builder;
-import lombok.Data;
+import lombok.Value;
 
-@Data
+@Value
 @Builder
 public class CategoryDto {
 
-    private String id;
-    private String name;
-    private String slug;
-    private String imageUrl;
-    private String parentCategoryId;
+    String id;
+    String name;
+    String slug;
+    String imageUrl;
+    String parentCategoryId;
 }

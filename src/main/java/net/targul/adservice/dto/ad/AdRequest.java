@@ -35,5 +35,5 @@ public class AdRequest {
     @NotNull
     @NotEmpty
     @Size(min = 1, message = "Ad must be linked to at least one category")
-    private List<UUID> categoryIds;
+    private List<@NotNull(message = "Category ID value is mandatory") UUID> categoryIds;
 }

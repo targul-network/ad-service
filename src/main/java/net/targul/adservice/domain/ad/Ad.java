@@ -1,11 +1,13 @@
-package net.targul.adservice.entity.ad;
+package net.targul.adservice.domain.ad;
 
 import lombok.Builder;
 import lombok.Data;
 
+import net.targul.adservice.domain.Category;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.LocalDateTime;
@@ -33,6 +35,10 @@ public class Ad {
     private String description;
 
     private Double price;
+
+    @DBRef
+    @Builder.Default
+    private List<Category> categoryIds = new ArrayList<>();
 
     @Builder.Default
     private List<String> imageUrls = new ArrayList<>();

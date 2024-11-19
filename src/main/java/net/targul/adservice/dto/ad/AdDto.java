@@ -2,7 +2,6 @@ package net.targul.adservice.dto.ad;
 
 import java.time.LocalDateTime;
 import java.util.List;
-
 import lombok.Builder;
 import lombok.Data;
 
@@ -10,19 +9,14 @@ import lombok.Data;
 @Builder
 public class AdDto {
 
+    private String id;
     private String shortId;
-
     private String status;
-
     private String title;
-
     private String slug;
-
     private String description;
-
     private Double price;
-
     private List<String> imageUrls;
-
+    private List<String> categoryIds;
     private LocalDateTime createdAt;
 }

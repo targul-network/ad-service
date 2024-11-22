@@ -8,7 +8,6 @@ import lombok.Data;
 
 import lombok.NoArgsConstructor;
 import net.targul.adservice.domain.Category;
-import net.targul.adservice.repository.converter.StringListConverter;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -25,6 +24,10 @@ public class Ad {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
+
+    @SequenceGenerator(name = "pid_seq", sequenceName = "pid_seq", allocationSize = 1)
+    @Column(unique = true, updatable = false)
+    private Long pid;
 
     @Enumerated(EnumType.STRING)
     @Builder.Default
@@ -43,8 +46,12 @@ public class Ad {
     )
     private List<Category> categories;
 
-    @Column(columnDefinition = "jsonb")
-    @Convert(converter = StringListConverter.class)
+    @ElementCollection
+    @CollectionTable(
+            name = "ad_image_urls",
+            joinColumns = @JoinColumn(name = "ad_id")
+    )
+    @Column(name = "url")
     private List<String> imageUrls;
 
     @Timestamp

@@ -27,6 +27,8 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-data-elasticsearch'
 	implementation 'org.springframework.boot:spring-boot-starter-oauth2-resource-server'
 	//	implementation 'org.springframework.boot:spring-boot-docker-compose'
+//	implementation 'com.fasterxml.jackson.core:jackson-databind:2.18.1'
+
 
 	implementation 'org.postgresql:postgresql:42.7.4'
 	implementation 'org.mongodb:bson:5.2.1'

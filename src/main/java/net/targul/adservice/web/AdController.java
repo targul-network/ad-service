@@ -28,9 +28,9 @@ public class AdController {
         this.adService = adService;
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<AdDto> getAdById(@PathVariable String id) {
-        return ResponseEntity.ok(adService.getAdById(UUID.fromString(id)));
+    @GetMapping("/{pid}")
+    public ResponseEntity<AdDto> getAdByPid(@PathVariable Long pid) {
+        return ResponseEntity.ok(adService.getAdByPid(pid));
     }
 
     @GetMapping

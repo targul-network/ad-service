@@ -9,7 +9,7 @@ import org.springframework.http.ResponseEntity;
 
 public interface AdService {
 
-    AdDto getAdById(UUID id);
+    AdDto getAdByPid(Long pid);
     List<AdDto> getActiveAdsByPage(int page);
     AdDto createAd(AdRequest adRequest);
     AdDto updateAd(UUID id, AdRequest adRequest);

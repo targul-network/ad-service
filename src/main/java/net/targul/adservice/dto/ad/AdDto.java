@@ -9,7 +9,7 @@ import lombok.Value;
 @Builder
 public class AdDto {
 
-    String id;
+    Long pid;
     String status;
     String title;
     String slug;

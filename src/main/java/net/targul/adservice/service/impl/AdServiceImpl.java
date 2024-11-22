@@ -40,9 +40,9 @@ public class AdServiceImpl implements AdService {
     private final SlugUtils slugUtils;
 
     @Override
-    public AdDto getAdById(UUID id) {
-        log.debug("Retrieving ad by id {}", id);
-        Ad ad = adRepository.findById(id).orElseThrow(() -> new AdNotFoundException("Ad not found with id " + id));
+    public AdDto getAdByPid(Long pid) {
+        log.debug("Retrieving ad by id {}", pid);
+        Ad ad = adRepository.findByPid(pid).orElseThrow(() -> new AdNotFoundException("Ad not found with id " + pid));
         log.debug("Retrieved ad {}", ad);
         AdDto adDto = adMapper.toDto(ad);
         log.info("Returning retrieved ad DTO {}", adDto);

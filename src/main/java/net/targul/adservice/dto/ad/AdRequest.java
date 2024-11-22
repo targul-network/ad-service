@@ -14,12 +14,12 @@ public class AdRequest {
 
     @NotNull(message = "Title is mandatory")
     @NotBlank(message = "Title cannot be blank")
-    @Size(min = 20, max = 255, message = "Tittle length must be from 20 to 150 chars")
+    @Size(min = 20, max = 255, message = "Title length must be between 20 and 255 characters")
     private String title;
 
     @NotNull(message = "Description is mandatory")
     @NotBlank(message = "Description cannot be blank")
-    @Size(min = 20, max = 500, message = "Description length must be from 20 to 500 chars")
+    @Size(min = 20, max = 500, message = "Description length must be between 20 and 500 characters")
     private String description;
 
     @NotNull(message = "Price is mandatory")
@@ -27,13 +27,13 @@ public class AdRequest {
     private Double price;
 
     @NotNull(message = "Image URLs list is mandatory")
-    @NotEmpty(message = "Image URLs list cannot be blank")
-    @Size(max = 10, message = "Image URLs list cannot contain more than 10 urls")
-    private List<@NotNull(message = "Value for Image URL cannot be null")
-                 @URL(message = "Invalid value for Image URL") String> imageUrls;
+    @NotEmpty(message = "Image URLs list cannot be empty")
+    @Size(max = 10, message = "Image URLs list cannot contain more than 10 URLs")
+    private List<@NotNull(message = "Image URL cannot be null")
+    @URL(message = "Invalid URL format for Image URL") String> imageUrls;
 
-    @NotNull
-    @NotEmpty
+    @NotNull(message = "Category IDs list is mandatory")
+    @NotEmpty(message = "Category IDs list cannot be empty")
     @Size(min = 1, message = "Ad must be linked to at least one category")
-    private List<@NotNull(message = "Category ID value is mandatory") UUID> categoryIds;
+    private List<@NotNull(message = "Category ID cannot be null") UUID> categoryIds;
 }

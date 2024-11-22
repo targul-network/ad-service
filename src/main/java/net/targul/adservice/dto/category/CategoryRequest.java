@@ -6,8 +6,6 @@ import lombok.Builder;
 import lombok.Data;
 import org.hibernate.validator.constraints.URL;
 
-import java.util.UUID;
-
 @Data
 @Builder
 public class CategoryRequest {
@@ -16,7 +14,7 @@ public class CategoryRequest {
     @Size(min = 1, max = 100, message = "Category name length must be from 1 to 100 chars")
     private String name;
 
-    private UUID parentCategoryId;
+    private Long parentCategoryId;
 
     @URL(message = "Invalid Category ImageURL")
     private String imageUrl;

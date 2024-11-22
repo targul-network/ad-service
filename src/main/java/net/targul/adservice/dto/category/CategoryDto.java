@@ -7,9 +7,9 @@ import lombok.Value;
 @Builder
 public class CategoryDto {
 
-    String id;
+    Long id;
     String name;
     String slug;
     String imageUrl;
-    String parentCategoryId;
+    Long parentCategoryId;
 }

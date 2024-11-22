@@ -8,7 +8,6 @@ import lombok.NoArgsConstructor;
 import net.targul.adservice.domain.ad.Ad;
 
 import java.util.List;
-import java.util.UUID;
 
 @Data
 @Builder
@@ -19,8 +18,8 @@ import java.util.UUID;
 public class Category {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private UUID id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     private String name;
 

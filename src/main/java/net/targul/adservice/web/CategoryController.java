@@ -11,7 +11,6 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.UUID;
 
 @RestController
 @RequestMapping("/categories")
@@ -26,7 +25,7 @@ public class CategoryController {
     }
 
     @GetMapping("/{categoryId}/subcategories")
-    public ResponseEntity<List<CategoryDto>> getSubcategories(@PathVariable UUID categoryId) {
+    public ResponseEntity<List<CategoryDto>> getSubcategories(@PathVariable Long categoryId) {
         List<CategoryDto> subcategories = categoryService.getSubcategoriesByParentCategoryId(categoryId);
         return ResponseEntity.ok(subcategories);
     }
@@ -38,7 +37,7 @@ public class CategoryController {
     }
 
     @GetMapping("/{categoryId}/breadcrumbs")
-    public ResponseEntity<List<CategoryDto>> getBreadcrumbsByCategoryId(@PathVariable UUID categoryId) {
+    public ResponseEntity<List<CategoryDto>> getBreadcrumbsByCategoryId(@PathVariable Long categoryId) {
         List<CategoryDto> breadcrumbs = categoryService.getBreadcrumbsByCategoryId(categoryId);
         return ResponseEntity.ok(breadcrumbs);
     }

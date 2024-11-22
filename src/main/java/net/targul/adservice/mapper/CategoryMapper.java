@@ -18,11 +18,11 @@ public class CategoryMapper {
     public CategoryDto toDto(Category category) {
         Category parentCategory = category.getParentCategory();
         return CategoryDto.builder()
-                .id(category.getId().toString())
+                .id(category.getId())
                 .name(category.getName())
                 .slug(category.getSlug())
                 .imageUrl(category.getImageUrl() != null ? category.getImageUrl() : null)
-                .parentCategoryId(parentCategory != null ? parentCategory.getId().toString() : null)
+                .parentCategoryId(parentCategory != null ? parentCategory.getId() : null)
                 .build();
     }
 }

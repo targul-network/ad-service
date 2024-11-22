@@ -1,7 +1,6 @@
 package net.targul.adservice.web;
 
 import java.util.List;
-import java.util.UUID;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -49,7 +48,7 @@ public class AdController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<AdDto> updateAd(@PathVariable UUID id, @RequestBody @Valid AdRequest adRequest) {
+    public ResponseEntity<AdDto> updateAd(@PathVariable Long id, @RequestBody @Valid AdRequest adRequest) {
         log.info("AdController::updateAd id: {}", id);
         log.debug("AdController::updateAd request body {}", adRequest);
 
@@ -60,32 +59,32 @@ public class AdController {
     }
 
     @PutMapping("/{id}/activate")
-    public ResponseEntity<String> activateAd(@PathVariable UUID id) {
+    public ResponseEntity<String> activateAd(@PathVariable Long id) {
         return adService.activateAd(id);
     }
 
     @PutMapping("/{id}/deactivate")
-    public ResponseEntity<Void> deactivateAd(@PathVariable UUID id) {
+    public ResponseEntity<Void> deactivateAd(@PathVariable Long id) {
         adService.deactivateAd(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @PutMapping("/{id}/archive")
-    public ResponseEntity<Void> archiveAd(@PathVariable UUID id) {
+    public ResponseEntity<Void> archiveAd(@PathVariable Long id) {
         log.info("AdController::archiveAd is processing Ad with id: {}", id);
         adService.archiveAd(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @PutMapping("/{id}/ban")
-    public ResponseEntity<Void> banAd(@PathVariable UUID id) {
+    public ResponseEntity<Void> banAd(@PathVariable Long id) {
         log.info("AdController::banAd is processing Ad with id: {}", id);
         adService.banAd(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteAd(@PathVariable UUID id) {
+    public ResponseEntity<Void> deleteAd(@PathVariable Long id) {
         log.info("AdController::banAd is processing Ad with id: {}", id);
         adService.deleteAd(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);

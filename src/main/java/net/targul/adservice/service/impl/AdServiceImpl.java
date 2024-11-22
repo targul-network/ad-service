@@ -27,7 +27,6 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 @Service
 @Slf4j
@@ -40,9 +39,9 @@ public class AdServiceImpl implements AdService {
     private final SlugUtils slugUtils;
 
     @Override
-    public AdDto getAdByPid(Long pid) {
-        log.debug("Retrieving ad by id {}", pid);
-        Ad ad = adRepository.findByPid(pid).orElseThrow(() -> new AdNotFoundException("Ad not found with id " + pid));
+    public AdDto getAdByPid(Long id) {
+        log.debug("Retrieving ad by id {}", id);
+        Ad ad = adRepository.findById(id).orElseThrow(() -> new AdNotFoundException("Ad not found with id " + id));
         log.debug("Retrieved ad {}", ad);
         AdDto adDto = adMapper.toDto(ad);
         log.info("Returning retrieved ad DTO {}", adDto);
@@ -81,7 +80,7 @@ public class AdServiceImpl implements AdService {
 
         // checking if every category exists
         List<Category> adCategories = new ArrayList<>();
-        for(UUID categoryId : adRequest.getCategoryIds()) {
+        for(Long categoryId : adRequest.getCategoryIds()) {
             Optional<Category> optionalCategory = categoryRepository.findById(categoryId);
             if(optionalCategory.isPresent()) {
                 adCategories.add(optionalCategory.get());
@@ -102,7 +101,7 @@ public class AdServiceImpl implements AdService {
     }
 
     @Override
-    public AdDto updateAd(UUID id, AdRequest adRequest) {
+    public AdDto updateAd(Long id, AdRequest adRequest) {
         log.info("AdService::updateAd execution has started.");
         log.debug("AdService::updateAd request parameters {}", adRequest);
 
@@ -126,7 +125,7 @@ public class AdServiceImpl implements AdService {
     }
 
     @Override
-    public ResponseEntity<String> activateAd(UUID id) {
+    public ResponseEntity<String> activateAd(Long id) {
         Optional<Ad> adOptional = adRepository.findById(id);
         if (adOptional.isEmpty()) {
             throw new EntityNotFoundException("Unable to activate nonexistent Ad entity with ID: " + id);
@@ -148,7 +147,7 @@ public class AdServiceImpl implements AdService {
     }
 
     @Override
-    public void deactivateAd(UUID id) {
+    public void deactivateAd(Long id) {
         Optional<Ad> adOptional = adRepository.findById(id);
         if (adOptional.isEmpty()) {
             throw new EntityNotFoundException("Unable to deactivate nonexistent Ad entity with ID: " + id);
@@ -163,7 +162,7 @@ public class AdServiceImpl implements AdService {
     }
 
     @Override
-    public void archiveAd(UUID id) {
+    public void archiveAd(Long id) {
         log.info("AdService::archiveAd execution has started.");
         log.debug("AdService::archiveAd ad id {}", id);
 
@@ -183,7 +182,7 @@ public class AdServiceImpl implements AdService {
     }
 
     @Override
-    public void banAd(UUID id) {
+    public void banAd(Long id) {
         Optional<Ad> adOptional = adRepository.findById(id);
         if (adOptional.isEmpty()) {
             throw new EntityNotFoundException("Unable to ban nonexistent Ad entity with ID: " + id);
@@ -198,7 +197,7 @@ public class AdServiceImpl implements AdService {
     }
 
     @Override
-    public void deleteAd(UUID id) {
+    public void deleteAd(Long id) {
 
         if (adRepository.existsById(id)) {
             adRepository.deleteById(id);

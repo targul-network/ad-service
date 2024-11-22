@@ -11,7 +11,6 @@ import net.targul.adservice.domain.Category;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.UUID;
 
 @Entity
 @Table(name = "ads")
@@ -22,12 +21,8 @@ import java.util.UUID;
 public class Ad {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private UUID id;
-
-    @SequenceGenerator(name = "pid_seq", sequenceName = "pid_seq", allocationSize = 1)
-    @Column(unique = true, updatable = false)
-    private Long pid;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     @Enumerated(EnumType.STRING)
     @Builder.Default

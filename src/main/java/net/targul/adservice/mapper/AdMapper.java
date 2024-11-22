@@ -3,11 +3,9 @@ package net.targul.adservice.mapper;
 import net.targul.adservice.dto.ad.AdRequest;
 import net.targul.adservice.dto.ad.AdDto;
 import net.targul.adservice.domain.ad.Ad;
-
 import net.targul.adservice.domain.Category;
 import org.springframework.stereotype.Component;
-
-import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Component
 public class AdMapper {
@@ -29,14 +27,14 @@ public class AdMapper {
             return null;
         }
         return AdDto.builder()
-                .pid(ad.getPid())
+                .id(ad.getId())
                 .status(String.valueOf(ad.getStatus()))
                 .title(ad.getTitle())
                 .slug(ad.getSlug())
                 .description(ad.getDescription())
                 .price(ad.getPrice())
                 .imageUrls(ad.getImageUrls())
-                .categoryIds(ad.getCategories().stream().map(Category::getId).map(UUID::toString).toList())
+                .categoryIds(ad.getCategories().stream().map(Category::getId).collect(Collectors.toList()))
                 .createdAt(ad.getCreatedAt())
                 .build();
     }

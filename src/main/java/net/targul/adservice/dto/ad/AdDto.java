@@ -9,13 +9,13 @@ import lombok.Value;
 @Builder
 public class AdDto {
 
-    Long pid;
+    Long id;
     String status;
     String title;
     String slug;
     String description;
     Double price;
     List<String> imageUrls;
-    List<String> categoryIds;
+    List<Long> categoryIds;
     LocalDateTime createdAt;
 }

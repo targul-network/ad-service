@@ -6,8 +6,8 @@ import net.targul.adservice.dto.ad.AdDto;
 import net.targul.adservice.domain.ad.Ad;
 import net.targul.adservice.domain.ad.AdStatus;
 import net.targul.adservice.domain.Category;
+import net.targul.adservice.service.exception.AdNotFoundException;
 import net.targul.adservice.service.exception.EntityNotFoundException;
-import net.targul.adservice.service.exception.AdStatusException;
 import net.targul.adservice.mapper.AdMapper;
 import net.targul.adservice.repository.AdRepository;
 import net.targul.adservice.repository.CategoryRepository;
@@ -16,7 +16,6 @@ import net.targul.adservice.service.AdService;
 import net.targul.adservice.util.id.base62.impl.ObjectIdBase62;
 import net.targul.adservice.util.SlugUtils;
 import net.targul.adservice.util.StringUtils;
-import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -39,44 +38,25 @@ public class AdServiceImpl implements AdService {
     private final CategoryRepository categoryRepository;
     private final AdMapper adMapper;
     private final SlugUtils slugUtils;
-    private final ObjectIdBase62 objectIdBase62;
+
+    @Override
+    public AdDto getAdById(UUID id) {
+        log.debug("Retrieving ad by id {}", id);
+        Ad ad = adRepository.findById(id).orElseThrow(() -> new AdNotFoundException("Ad not found with id " + id));
+        log.debug("Retrieved ad {}", ad);
+        AdDto adDto = adMapper.toDto(ad);
+        log.info("Returning retrieved ad DTO {}", adDto);
+        return adDto;
+    }
 
     public AdServiceImpl(@Value("${app.ads.per-page}") int adsPerPage, AdRepository adRepository,
                          CategoryRepository categoryRepository, AdMapper adMapper, SlugUtils slugUtils,
                          ObjectIdBase62 objectIdBase62) {
-        ADS_PER_PAGE = adsPerPage;
+        this.ADS_PER_PAGE = adsPerPage;
         this.adRepository = adRepository;
         this.categoryRepository = categoryRepository;
         this.adMapper = adMapper;
         this.slugUtils = slugUtils;
-        this.objectIdBase62 = objectIdBase62;
-    }
-
-    @Override
-    public ResponseEntity<AdDto> getAdBySlugAndShortId(String slug, String shortId) {
-        // getting ad from repository by shortId
-        Optional<Ad> optionalAd = adRepository.getAdByShortId(shortId);
-
-        // checking if ad was found
-        if (optionalAd.isEmpty()) {
-            throw new EntityNotFoundException("Unable to find Ad entity with Short ID: " + shortId);
-        }
-
-        Ad ad = optionalAd.get();
-
-        // checking if ad has accepted status to be shown
-        AdStatus adStatus = ad.getStatus();
-        if(adStatus.equals(AdStatus.PENDING) || adStatus.equals(AdStatus.BANNED)) {
-            throw new AdStatusException("Access to this Ad is currently forbidden. Ad status: " + adStatus);
-        }
-
-        // TODO check if the found ad by short id has the same slug as in url
-//        if (!slug.equals(ad.getSlug())) {
-//            String correctUrl = String.format("ads/%s-%s", ad.getSlug(), shortId);
-//            return ResponseEntity.status(HttpStatus.MOVED_PERMANENTLY).header("Location", correctUrl).build();
-//        }
-
-        return new ResponseEntity<>(adMapper.toDto(ad), HttpStatus.OK);
     }
 
     @Override
@@ -113,7 +93,6 @@ public class AdServiceImpl implements AdService {
         ad.setCategories(adCategories);
 
         Ad savedAd = adRepository.save(ad);
-        savedAd.setShortId(objectIdBase62.encode(new ObjectId(savedAd.getId().toString())));
         adRepository.save(savedAd);
 
         AdDto adDto = adMapper.toDto(savedAd);

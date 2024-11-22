@@ -10,7 +10,6 @@ import lombok.Value;
 public class AdDto {
 
     String id;
-    String shortId;
     String status;
     String title;
     String slug;

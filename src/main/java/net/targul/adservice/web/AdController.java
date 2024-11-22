@@ -28,9 +28,9 @@ public class AdController {
         this.adService = adService;
     }
 
-    @GetMapping("/{slug}-{shortId}")
-    public ResponseEntity<AdDto> getAdBySlugAndShortId(@PathVariable String slug, @PathVariable String shortId) {
-        return adService.getAdBySlugAndShortId(slug, shortId);
+    @GetMapping("/{id}")
+    public ResponseEntity<AdDto> getAdById(@PathVariable String id) {
+        return ResponseEntity.ok(adService.getAdById(UUID.fromString(id)));
     }
 
     @GetMapping

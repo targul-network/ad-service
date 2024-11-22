@@ -26,9 +26,6 @@ public class Ad {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    @Column(unique = true)
-    private String shortId;
-
     @Enumerated(EnumType.STRING)
     @Builder.Default
     private AdStatus status = AdStatus.PENDING;

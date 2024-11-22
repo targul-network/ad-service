@@ -30,7 +30,6 @@ public class AdMapper {
         }
         return AdDto.builder()
                 .id(ad.getId().toString())
-                .shortId(ad.getShortId())
                 .status(String.valueOf(ad.getStatus()))
                 .title(ad.getTitle())
                 .slug(ad.getSlug())

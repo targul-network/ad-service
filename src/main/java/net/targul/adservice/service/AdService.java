@@ -9,21 +9,13 @@ import org.springframework.http.ResponseEntity;
 
 public interface AdService {
 
-    ResponseEntity<AdDto> getAdBySlugAndShortId(String slug, String shortId);
-
+    AdDto getAdById(UUID id);
     List<AdDto> getActiveAdsByPage(int page);
-
     AdDto createAd(AdRequest adRequest);
-
     AdDto updateAd(UUID id, AdRequest adRequest);
-
     ResponseEntity<String> activateAd(UUID id);
-
     void deactivateAd(UUID id);
-
     void archiveAd(UUID id);
-
     void banAd(UUID id);
-
     void deleteAd(UUID id);
 }

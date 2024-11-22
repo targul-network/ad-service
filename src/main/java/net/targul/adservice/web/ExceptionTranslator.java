@@ -3,6 +3,7 @@ package net.targul.adservice.web;
 import java.net.URI;
 import java.util.List;
 
+import net.targul.adservice.service.exception.AdNotFoundException;
 import org.springframework.http.ProblemDetail;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.HttpStatus;
@@ -32,6 +33,15 @@ public class ExceptionTranslator extends ResponseEntityExceptionHandler {
         problemDetail.setType(URI.create("urn:problem-type:validation-error"));
         problemDetail.setTitle("Field Validation Exception");
         problemDetail.setProperty("invalidParams", validationResponse);
+        return problemDetail;
+    }
+
+    @ExceptionHandler(AdNotFoundException.class)
+    ProblemDetail handleEntityNotFoundException(AdNotFoundException ex) {
+        log.info("Ad Not Found exception raised.");
+        ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.NOT_FOUND, ex.getMessage());
+        problemDetail.setType(URI.create("ad-not-found"));
+        problemDetail.setTitle("Ad Not Found");
         return problemDetail;
     }
 

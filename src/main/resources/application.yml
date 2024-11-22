@@ -7,6 +7,15 @@ spring:
   application:
     name: ad-service
 
+  profiles:
+    active: dev
+
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://localhost:8080/realms/targul
+
   datasource:
     url: jdbc:postgresql://localhost:5432/trgladservicedb
     username: postgres

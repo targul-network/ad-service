@@ -13,11 +13,14 @@ services:
     networks:
       - my_network
 
-  adminer:
-    image: adminer:latest
+  adminer-pg:
+    image: dpage/pgadmin4
     container_name: adminer-pg
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@example.com
+      PGADMIN_DEFAULT_PASSWORD: admin
     ports:
-      - "5430:5430"
+      - "5050:80"
     networks:
       - my_network
 

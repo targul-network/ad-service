@@ -1,0 +1,22 @@
+-- Insert into the ads table
+INSERT INTO ads ( status, title, slug, description, price, created_at) VALUES ('ACTIVE', 'Sample Ad Title', 'sample-ad-slug', 'This is a description of the ad.', 99.99, NOW());
+INSERT INTO ads ( status, title, slug, description, price, created_at) VALUES ('ACTIVE', 'Sample Ad Title', 'sample-ad-slug', 'This is a description of the ad.', 99.99, NOW());
+INSERT INTO ads ( status, title, slug, description, price, created_at) VALUES ('ACTIVE', 'Sample Ad Title', 'sample-ad-slug', 'This is a description of the ad.', 99.99, NOW());
+INSERT INTO ads ( status, title, slug, description, price, created_at) VALUES ('ACTIVE', 'Sample Ad Title', 'sample-ad-slug', 'This is a description of the ad.', 99.99, NOW());
+INSERT INTO ads ( status, title, slug, description, price, created_at) VALUES ('ACTIVE', 'Sample Ad Title', 'sample-ad-slug', 'This is a description of the ad.', 99.99, NOW());
+INSERT INTO ads ( status, title, slug, description, price, created_at) VALUES ('ACTIVE', 'Sample Ad Title', 'sample-ad-slug', 'This is a description of the ad.', 99.99, NOW());
+INSERT INTO ads ( status, title, slug, description, price, created_at) VALUES ('ACTIVE', 'Sample Ad Title', 'sample-ad-slug', 'This is a description of the ad.', 99.99, NOW());
+INSERT INTO ads ( status, title, slug, description, price, created_at) VALUES ('ACTIVE', 'Sample Ad Title', 'sample-ad-slug', 'This is a description of the ad.', 99.99, NOW());
+INSERT INTO ads ( status, title, slug, description, price, created_at) VALUES ('ACTIVE', 'Sample Ad Title', 'sample-ad-slug', 'This is a description of the ad.', 99.99, NOW());
+INSERT INTO ads ( status, title, slug, description, price, created_at) VALUES ('ACTIVE', 'Sample Ad Title', 'sample-ad-slug', 'This is a description of the ad.', 99.99, NOW());
+INSERT INTO ads ( status, title, slug, description, price, created_at) VALUES ('ACTIVE', 'Sample Ad Title', 'sample-ad-slug', 'This is a description of the ad.', 99.99, NOW());
+INSERT INTO ads ( status, title, slug, description, price, created_at) VALUES ('ACTIVE', 'Sample Ad Title', 'sample-ad-slug', 'This is a description of the ad.', 99.99, NOW());
+INSERT INTO ads ( status, title, slug, description, price, created_at) VALUES ('ACTIVE', 'Sample Ad Title', 'sample-ad-slug', 'This is a description of the ad.', 99.99, NOW());
+INSERT INTO ads ( status, title, slug, description, price, created_at) VALUES ('ACTIVE', 'Sample Ad Title', 'sample-ad-slug', 'This is a description of the ad.', 99.99, NOW());
+INSERT INTO ads ( status, title, slug, description, price, created_at) VALUES ('ACTIVE', 'Sample Ad Title', 'sample-ad-slug', 'This is a description of the ad.', 99.99, NOW());
+INSERT INTO ads ( status, title, slug, description, price, created_at) VALUES ('ACTIVE', 'Sample Ad Title', 'sample-ad-slug', 'This is a description of the ad.', 99.99, NOW());
+INSERT INTO ads ( status, title, slug, description, price, created_at) VALUES ('ACTIVE', 'Sample Ad Title', 'sample-ad-slug', 'This is a description of the ad.', 99.99, NOW());
+INSERT INTO ads ( status, title, slug, description, price, created_at) VALUES ('ACTIVE', 'Sample Ad Title', 'sample-ad-slug', 'This is a description of the ad.', 99.99, NOW());
+INSERT INTO ads ( status, title, slug, description, price, created_at) VALUES ('ACTIVE', 'Sample Ad Title', 'sample-ad-slug', 'This is a description of the ad.', 99.99, NOW());
+INSERT INTO ads ( status, title, slug, description, price, created_at) VALUES ('ACTIVE', 'Sample Ad Title', 'sample-ad-slug', 'This is a description of the ad.', 99.99, NOW());
+INSERT INTO ads ( status, title, slug, description, price, created_at) VALUES ('ACTIVE', 'Sample Ad Title', 'sample-ad-slug', 'This is a description of the ad.', 99.99, NOW());

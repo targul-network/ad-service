@@ -1,23 +1,46 @@
 version: '3.1'
 
 services:
-
-  mongo:
-    image: mongo
-    restart: always
-    ports:
-      - "27017:27017"
+  postgres:
+    image: postgres:latest
+    container_name: postgres
     environment:
-      MONGO_INITDB_ROOT_USERNAME: root
-      MONGO_INITDB_ROOT_PASSWORD: example
-
-  mongo-express:
-    image: mongo-express
-    restart: always
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: secret
+      POSTGRES_DB: trgladservicedb
     ports:
-      - "8081:8081"
-    environment:
-      ME_CONFIG_MONGODB_ADMINUSERNAME: root
-      ME_CONFIG_MONGODB_ADMINPASSWORD: example
-      ME_CONFIG_MONGODB_URL: mongodb://root:example@mongo:27017/
-      ME_CONFIG_BASICAUTH: false
+      - "5432:5432"
+    networks:
+      - my_network
+
+  adminer:
+    image: adminer:latest
+    container_name: adminer-pg
+    ports:
+      - "5430:5430"
+    networks:
+      - my_network
+
+networks:
+  my_network:
+    driver: bridge
+
+#  mongo:
+#    image: mongo
+#    restart: always
+#    ports:
+#      - "27017:27017"
+#    environment:
+#      MONGO_INITDB_ROOT_USERNAME: root
+#      MONGO_INITDB_ROOT_PASSWORD: example
+#
+#  mongo-express:
+#    image: mongo-express
+#    restart: always
+#    ports:
+#      - "8081:8081"
+#    environment:
+#      ME_CONFIG_MONGODB_ADMINUSERNAME: root
+#      ME_CONFIG_MONGODB_ADMINPASSWORD: example
+#      ME_CONFIG_MONGODB_URL: mongodb://root:example@mongo:27017/
+#      ME_CONFIG_BASICAUTH: false

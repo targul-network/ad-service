@@ -29,4 +29,4 @@ spring:
 
 app:
   ads:
-    per-page: 20
+    per-page: 4

@@ -73,7 +73,7 @@ public class AdServiceImpl implements AdService {
 
         Ad ad = adMapper.toEntity(adRequest);
 
-        ad.setStatus(AdStatus.PENDING);
+        ad.setStatus(AdStatus.ACTIVE);                              // todo turn back to status PENDING
         ad.setTitle(StringUtils.clearExtraSpaces(ad.getTitle()));
         ad.setSlug(slugUtils.generateSlug(ad.getTitle()));
         ad.setCreatedAt(LocalDateTime.now());

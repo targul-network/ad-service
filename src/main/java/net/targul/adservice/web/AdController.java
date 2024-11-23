@@ -33,7 +33,7 @@ public class AdController {
     }
 
     @GetMapping
-    public ResponseEntity<List<AdDto>> getAllAdsByPage(@RequestParam(value = "p", defaultValue = "0") int page) {
+    public ResponseEntity<List<AdDto>> getAllAdsByPage(@RequestParam(value = "page", defaultValue = "2") int page) {
         List<AdDto> adDtoList = adService.getActiveAdsByPage(--page);
         return new ResponseEntity<>(adDtoList, HttpStatus.OK);
     }
